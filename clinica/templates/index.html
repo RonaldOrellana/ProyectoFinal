@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="hero">
+    <h2>Servicios destacados</h2>
+    <p>Atención profesional, tecnología y calidez humana.</p>
+</section>
+
+<section class="cards">
+    {% for servicio in servicios %}
+    <article class="card">
+        <h3>{{ servicio.nombre }}</h3>
+        <p>{{ servicio.descripcion|truncatechars:120 }}</p>
+        <div class="price">${{ servicio.precio }}</div>
+    </article>
+    {% empty %}
+    <p>No hay servicios disponibles aun.</p>
+    {% endfor %}
+</section>
+{% endblock %}

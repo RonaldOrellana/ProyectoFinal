@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Citas</h2>
+<ul>
+    {% for c in citas %}
+    <li>{{ c.fecha }} — {{ c.paciente }} con {{ c.medico }}</li>
+    {% empty %}
+    <li>No hay citas.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
