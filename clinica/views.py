@@ -114,27 +114,40 @@ def eliminar_cita(request, cita_id):
         return redirect('citas')
     return render(request, 'clinica/eliminar_cita.html', {'cita': cita})
 
-from django.urls import path
-from . import views
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import Cita, Paciente, Medico
+from .forms import CitaForm, PacienteForm
 
-urlpatterns = [
-    path('', views.index, name='index'),
+def registrar_cita(request):
+    pacientes = Paciente.objects.all().order_by('nombre')
+    medicos = Medico.objects.all().order_by('nombre')
 
-    # Pacientes
-    path('pacientes/', views.pacientes, name='pacientes'),
-    path('pacientes/nuevo/', views.crear_paciente, name='crear_paciente'),
-    path('pacientes/nuevo/ajax/', views.crear_paciente_ajax, name='crear_paciente_ajax'),
+    if request.method == 'POST':
+        cita_form = CitaForm(request.POST)
+        paciente_form = PacienteForm(request.POST)
 
-    # Médicos
-    path('medicos/', views.medicos, name='medicos'),
+        # Si el usuario escribió un nuevo paciente, lo guardamos primero
+        if paciente_form.is_valid() and cita_form.is_valid():
+            # Guardar nuevo paciente
+            nuevo_paciente = paciente_form.save()
+            
+            # Asignar el paciente recién creado a la cita
+            cita = cita_form.save(commit=False)
+            cita.paciente = nuevo_paciente
+            cita.save()
 
-    # Citas
-    path('citas/', views.citas_lista, name='citas'),  # Lista de citas
-    path('citas/nueva/', views.registrar_cita, name='registrar_cita'),  # Registrar cita
-    path('citas/<int:cita_id>/', views.ver_cita, name='ver_cita'),
-    path('citas/<int:cita_id>/editar/', views.editar_cita, name='editar_cita'),
-    path('citas/<int:cita_id>/eliminar/', views.eliminar_cita, name='eliminar_cita'),
+            messages.success(request, "✅ Cita y paciente registrados correctamente.")
+            return redirect('citas_lista')
+        else:
+            messages.error(request, "⚠️ Verifica los datos ingresados.")
+    else:
+        cita_form = CitaForm()
+        paciente_form = PacienteForm()
 
-    # Contacto
-    path('contacto/', views.contacto, name='contacto'),
-]
+    return render(request, 'clinica/registrar_cita.html', {
+        'cita_form': cita_form,
+        'paciente_form': paciente_form,
+        'pacientes': pacientes,
+        'medicos': medicos
+    })

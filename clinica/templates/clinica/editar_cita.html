@@ -1,43 +1,100 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
-<div class="container mt-5">
-  <h2>Editar Cita</h2>
-  <form method="post">
-    {% csrf_token %}
-    <div class="mb-3">
-      <label>Paciente</label>
-      <select name="paciente" class="form-select">
-        {% for paciente in pacientes %}
-          <option value="{{ paciente.id }}" {% if paciente == cita.paciente %}selected{% endif %}>
-            {{ paciente.nombre }} {{ paciente.apellido }}
-          </option>
-        {% endfor %}
-      </select>
-    </div>
 
-    <div class="mb-3">
-      <label>Médico</label>
-      <select name="medico" class="form-select">
-        {% for medico in medicos %}
-          <option value="{{ medico.id }}" {% if medico == cita.medico %}selected{% endif %}>
-            {{ medico.nombre }} {{ medico.apellido }} — {{ medico.especialidad }}
-          </option>
-        {% endfor %}
-      </select>
-    </div>
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+      <div class="card border-0 shadow-lg rounded-4">
+        <div class="card-header text-white text-center py-3"
+             style="background: linear-gradient(90deg, #00bcd4, #007bff);">
+          <h3 class="fw-bold mb-0">✏️ Editar Cita</h3>
+        </div>
 
-    <div class="mb-3">
-      <label>Fecha y Hora</label>
-      <input type="datetime-local" name="fecha" value="{{ cita.fecha|date:'Y-m-d\\TH:i' }}" class="form-control">
-    </div>
+        <div class="card-body p-4">
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-{{ message.tags }} text-center fw-semibold">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
 
-    <div class="mb-3">
-      <label>Motivo</label>
-      <textarea name="motivo" class="form-control">{{ cita.motivo }}</textarea>
-    </div>
+          <form method="post" class="needs-validation" novalidate>
+            {% csrf_token %}
 
-    <button type="submit" class="btn btn-warning">✏️ Guardar Cambios</button>
-    <a href="{% url 'citas_lista' %}" class="btn btn-secondary">🔙 Cancelar</a>
-  </form>
+            <div class="mb-3">
+              <label class="form-label fw-semibold">👤 Paciente</label>
+              <select name="paciente" class="form-select form-select-lg shadow-sm rounded-pill">
+                {% for paciente in pacientes %}
+                  <option value="{{ paciente.id }}" {% if paciente == cita.paciente %}selected{% endif %}>
+                    {{ paciente.nombre }} {{ paciente.apellido }}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold">🩺 Médico</label>
+              <select name="medico" class="form-select form-select-lg shadow-sm rounded-pill">
+                {% for medico in medicos %}
+                  <option value="{{ medico.id }}" {% if medico == cita.medico %}selected{% endif %}>
+                    {{ medico.nombre }} {{ medico.apellido }} — {{ medico.especialidad }}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold">📅 Fecha y Hora</label>
+              <input type="datetime-local" name="fecha"
+                     value="{{ cita.fecha|date:'Y-m-d\\TH:i' }}"
+                     class="form-control form-control-lg shadow-sm rounded-pill">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold">📝 Motivo</label>
+              <textarea name="motivo" rows="3"
+                        class="form-control form-control-lg shadow-sm rounded-4">{{ cita.motivo }}</textarea>
+            </div>
+
+            <div class="d-grid gap-3 mt-4">
+              <button type="submit"
+                      class="btn btn-gradient btn-lg text-white fw-bold rounded-pill py-3 shadow"
+                      style="background: linear-gradient(90deg, #00bcd4, #007bff); border: none;">
+                💾 Guardar Cambios
+              </button>
+              <a href="{% url 'citas_lista' %}" 
+                 class="btn btn-secondary btn-lg fw-bold rounded-pill py-3 shadow-sm">
+                🔙 Cancelar
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+<style>
+  body {
+      background-color: #f4f9ff;
+  }
+
+  .card {
+      animation: fadeInUp 0.6s ease-in-out;
+  }
+
+  @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+  }
+
+  .btn-gradient:hover {
+      opacity: 0.9;
+      transform: scale(1.02);
+      transition: all 0.2s ease-in-out;
+  }
+</style>
+
 {% endblock %}

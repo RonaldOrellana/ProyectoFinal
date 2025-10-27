@@ -109,3 +109,27 @@ from django.shortcuts import render
 def pacientes(request):
     return render(request, 'pacientes.html')
 
+from django import forms
+from .models import Cita, Paciente
+
+class PacienteForm(forms.ModelForm):
+    class Meta:
+        model = Paciente
+        fields = ['nombre', 'apellido', 'dui', 'telefono', 'direccion']
+        widgets = {
+            'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre del paciente'}),
+            'apellido': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Apellido del paciente'}),
+            'dui': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej: 12345678-9'}),
+            'telefono': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej: 7777-8888'}),
+            'direccion': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Dirección del paciente'}),
+        }
+
+class CitaForm(forms.ModelForm):
+    class Meta:
+        model = Cita
+        fields = ['medico', 'fecha', 'motivo']
+        widgets = {
+            'medico': forms.Select(attrs={'class': 'form-select'}),
+            'fecha': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
+            'motivo': forms.Textarea(attrs={'class': 'form-control', 'rows': 2, 'placeholder': 'Motivo de la cita'}),
+        }

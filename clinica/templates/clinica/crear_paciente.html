@@ -1,29 +1,85 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 
-<div class="row justify-content-center mt-5">
-    <div class="col-md-6">
-        <div class="card shadow rounded-4">
-            <div class="card-header bg-primary text-white text-center">
-                <h3>Registrar Paciente</h3>
-            </div>
-            <div class="card-body p-4">
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert alert-{{ message.tags }} text-center">{{ message }}</div>
-                    {% endfor %}
-                {% endif %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="card border-0 shadow-lg rounded-4">
+                <div class="card-header text-white text-center py-3"
+                     style="background: linear-gradient(90deg, #0062E6, #33AEFF);">
+                    <h3 class="fw-bold mb-0">🩺 Registrar Nuevo Paciente</h3>
+                </div>
 
-                <form method="post">
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <div class="d-grid mt-3">
-                        <button type="submit" class="btn btn-success btn-lg rounded-pill">💾 Guardar Paciente</button>
-                    </div>
-                </form>
+                <div class="card-body p-4">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} text-center fw-semibold">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold">Nombre</label>
+                                {{ form.nombre|add_class:"form-control form-control-lg shadow-sm" }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold">Apellido</label>
+                                {{ form.apellido|add_class:"form-control form-control-lg shadow-sm" }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold">DUI</label>
+                                {{ form.dui|add_class:"form-control form-control-lg shadow-sm" }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold">Teléfono</label>
+                                {{ form.telefono|add_class:"form-control form-control-lg shadow-sm" }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Dirección</label>
+                            {{ form.direccion|add_class:"form-control form-control-lg shadow-sm" }}
+                        </div>
+
+                        <div class="d-grid mt-4">
+                            <button type="submit" 
+                                    class="btn btn-lg text-white fw-bold rounded-pill py-3 shadow"
+                                    style="background: linear-gradient(90deg, #33AEFF, #0062E6); border: none;">
+                                💾 Guardar Paciente
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    body {
+        background-color: #f2f8ff;
+    }
+    .card {
+        animation: fadeIn 0.5s ease-in-out;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    button:hover {
+        opacity: 0.9;
+        transform: scale(1.02);
+        transition: 0.2s;
+    }
+</style>
 
 {% endblock %}
