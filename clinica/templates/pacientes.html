@@ -1,11 +1,159 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>Pacientes</h2>
-<ul>
-    {% for p in pacientes %}
-    <li>{{ p.nombre }} {{ p.apellido }} — {{ p.correo }}</li>
-    {% empty %}
-    <li>No hay pacientes.</li>
+
+<style>
+/* 🎨 Estilos generales */
+body {
+  background: #f2f6fa;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* 🩺 Encabezado */
+.header-section {
+  background: linear-gradient(135deg, #00b4d8, #0077b6);
+  color: white;
+  border-radius: 20px;
+  padding: 60px 20px;
+  text-align: center;
+  margin-bottom: 50px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.header-section h1 {
+  font-size: 2.8rem;
+  font-weight: 700;
+}
+
+.header-section p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+/* 💎 Tarjetas modernas */
+.card-glass {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.3);
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-glass:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+}
+
+/* 🧍 Nombre del paciente */
+.patient-name {
+  color: #0077b6;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+/* 🔵 Botones */
+.btn-modern {
+  border-radius: 25px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-modern:hover {
+  transform: scale(1.05);
+}
+
+/* 💬 Etiquetas */
+.badge-age {
+  background-color: #00b4d8;
+  color: white;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  padding: 4px 10px;
+}
+
+/* ✨ Animación */
+.fade-in {
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 🧱 Tamaño uniforme de tarjetas */
+.card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 25px;
+}
+
+.card-body-custom {
+  flex-grow: 1;
+}
+
+.card-footer-custom {
+  margin-top: auto;
+}
+</style>
+
+<!-- 🩺 Encabezado -->
+<section class="header-section fade-in">
+  <h1>👨‍⚕️ Pacientes Registrados</h1>
+  <p>Gestión moderna y organizada de todos tus pacientes.</p>
+</section>
+
+<div class="container mb-5 fade-in">
+
+  <!-- 🔍 Barra superior -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="fw-bold text-secondary mb-0">Lista de Pacientes</h4>
+    <a href="{'crear_paciente' }" class="btn btn-success btn-modern shadow-sm px-4">
+      <i class="bi bi-person-plus-fill me-2"></i> Nuevo Paciente
+    </a>
+  </div>
+
+  <!-- 📋 Tarjetas -->
+  {% if pacientes %}
+  <div class="card-container">
+    {% for paciente in pacientes %}
+    <div class="card-glass p-4">
+      <div class="card-body-custom">
+        <div class="d-flex align-items-center mb-3">
+          <i class="bi bi-person-circle fs-1 text-primary me-3"></i>
+          <div>
+            <h5 class="patient-name mb-0">{{ paciente.nombre }}</h5>
+            <small class="text-muted">ID: {{ paciente.id }}</small>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <span class="badge-age">Edad: {{ paciente.edad }}</span>
+          <p class="mt-3 mb-1"><i class="bi bi-envelope"></i> {{ paciente.email }}</p>
+          <p class="mb-0"><i class="bi bi-telephone"></i> {{ paciente.telefono }}</p>
+        </div>
+      </div>
+
+      <div class="card-footer-custom d-flex justify-content-between mt-3">
+        <a href="{'editar_paciente' }" class="btn btn-outline-primary btn-modern btn-sm px-3">
+          <i class="bi bi-pencil"></i> Editar
+        </a>
+        <a href="{'eliminar_paciente' }" class="btn btn-outline-danger btn-modern btn-sm px-3">
+          <i class="bi bi-trash"></i> Eliminar
+        </a>
+      </div>
+    </div>
     {% endfor %}
-</ul>
+  </div>
+  {% else %}
+  <div class="alert alert-info text-center shadow-sm">
+    <i class="bi bi-info-circle"></i> No hay pacientes registrados todavía.
+  </div>
+  {% endif %}
+</div>
+
 {% endblock %}

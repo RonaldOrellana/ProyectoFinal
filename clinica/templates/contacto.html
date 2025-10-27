@@ -1,5 +1,143 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>Contacto</h2>
-<p>Tel: +503 7006-5644 · ClinicaSalud@gmail.com</p>
+<style>
+body {
+  background: #f3f7fa;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* 🩵 Encabezado */
+.contact-header {
+  background: linear-gradient(135deg, #007bff, #004e92);
+  color: white;
+  border-radius: 25px;
+  padding: 60px 20px;
+  text-align: center;
+  margin-bottom: 50px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.contact-header h1 {
+  font-size: 2.8rem;
+  font-weight: 700;
+}
+
+.contact-header p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+/* 📬 Tarjeta de contacto */
+.contact-card {
+  background: white;
+  border: none;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  transition: all 0.3s ease;
+}
+
+.contact-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+/* 💬 Formulario */
+.form-control, textarea {
+  border-radius: 15px;
+  border: 1px solid #cfd8dc;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus, textarea:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.2);
+}
+
+/* ✉️ Iconos */
+.contact-info i {
+  font-size: 1.5rem;
+  color: #007bff;
+}
+
+/* 🧠 Botón moderno */
+.btn-modern {
+  border-radius: 25px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-modern:hover {
+  transform: scale(1.05);
+}
+
+/* Animación */
+.fade-in {
+  animation: fadeIn 0.6s ease-in-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>
+
+<!-- 🌐 Encabezado -->
+<section class="contact-header fade-in">
+  <h1>📞 Contáctanos</h1>
+  <p>Estamos aquí para ayudarte. Escríbenos o visítanos en la clínica.</p>
+</section>
+
+<!-- 💬 Contenido principal -->
+<div class="container mb-5 fade-in">
+  <div class="row g-4 align-items-stretch">
+    <!-- 📇 Información -->
+    <div class="col-md-5">
+      <div class="contact-card h-100">
+        <h4 class="text-primary mb-4 fw-bold">Información de Contacto</h4>
+        <div class="contact-info mb-3 d-flex align-items-center">
+          <i class="bi bi-telephone-fill me-3"></i>
+          <span><strong>Teléfono:</strong> +503 7006-5644</span>
+        </div>
+        <div class="contact-info mb-3 d-flex align-items-center">
+          <i class="bi bi-envelope-fill me-3"></i>
+          <span><strong>Correo:</strong> ClinicaSalud@gmail.com</span>
+        </div>
+        <div class="contact-info mb-3 d-flex align-items-center">
+          <i class="bi bi-geo-alt-fill me-3"></i>
+          <span><strong>Dirección:</strong> San Salvador, El Salvador</span>
+        </div>
+        <hr>
+        <h5 class="text-secondary fw-semibold mb-2">Horario de Atención</h5>
+        <p class="mb-1">🕐 Lunes a Viernes: 8:00 AM – 5:00 PM</p>
+        <p>🩺 Sábado: 8:00 AM – 12:00 PM</p>
+      </div>
+    </div>
+
+    <!-- 📝 Formulario -->
+    <div class="col-md-7">
+      <div class="contact-card h-100">
+        <h4 class="text-primary fw-bold mb-4">Envíanos un Mensaje</h4>
+        <form>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Nombre</label>
+            <input type="text" class="form-control" placeholder="Tu nombre completo">
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Correo Electrónico</label>
+            <input type="email" class="form-control" placeholder="ejemplo@correo.com">
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Mensaje</label>
+            <textarea class="form-control" rows="4" placeholder="Escribe tu mensaje..."></textarea>
+          </div>
+          <div class="text-end">
+            <button type="submit" class="btn btn-primary btn-modern px-4">
+              <i class="bi bi-send-fill me-2"></i> Enviar Mensaje
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

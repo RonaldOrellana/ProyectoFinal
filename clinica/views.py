@@ -151,3 +151,18 @@ def registrar_cita(request):
         'pacientes': pacientes,
         'medicos': medicos
     })
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from .models import Medico
+
+def eliminar_medico(request, id):
+    medico = get_object_or_404(Medico, id=id)
+
+    if request.method == 'POST':
+        medico.delete()
+        messages.success(request, '✅ El médico fue eliminado correctamente.')
+        return redirect('medicos')
+
+    return render(request, 'clinica/eliminar_medico.html', {'medico': medico})
