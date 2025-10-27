@@ -17,6 +17,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'clinica',
+
 ]
 
 MIDDLEWARE = [
@@ -54,10 +55,13 @@ DATABASES = {
         'ENGINE': 'mssql',
         'NAME': 'ClinicaBD',
         'HOST': 'DESKTOP-FLPOK2F\\SQLEXPRESS01',
-        'PORT': '1433',
-      
+        'PORT': '',
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',
+        },
     }
 }
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -82,3 +86,4 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'clinica' / 'static']
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+

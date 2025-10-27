@@ -1,39 +1,53 @@
 from django.db import models
 
+from django.db import models
+
 class Paciente(models.Model):
     nombre = models.CharField(max_length=100)
     apellido = models.CharField(max_length=100)
-    fecha_nacimiento = models.DateField()
-    telefono = models.CharField(max_length=15)
-    correo = models.EmailField(unique=True)
-    direccion = models.TextField(blank=True)
+    dui = models.CharField(max_length=10, unique=True)
+    telefono = models.CharField(max_length=9, blank=True, null=True)
+    direccion = models.CharField(max_length=200, blank=True, null=True)
 
     def __str__(self):
         return f"{self.nombre} {self.apellido}"
 
+
+# Modelo Medico
 class Medico(models.Model):
     nombre = models.CharField(max_length=100)
     apellido = models.CharField(max_length=100)
     especialidad = models.CharField(max_length=100)
-    telefono = models.CharField(max_length=15)
-    correo = models.EmailField(unique=True)
+    telefono = models.CharField(max_length=15, blank=True)
+    correo = models.EmailField(unique=True, blank=True)
 
     def __str__(self):
         return f"Dr. {self.nombre} {self.apellido} - {self.especialidad}"
 
+# Modelo Servicio
 class Servicio(models.Model):
+    medico = models.ForeignKey(Medico, on_delete=models.CASCADE, related_name="servicios")
     nombre = models.CharField(max_length=100)
-    descripcion = models.TextField()
+    descripcion = models.TextField(blank=True)
     precio = models.DecimalField(max_digits=8, decimal_places=2)
 
     def __str__(self):
-        return self.nombre
+        return f"{self.nombre} ({self.medico.nombre} {self.medico.apellido})"
 
+# Modelo Cita
 class Cita(models.Model):
-    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
-    medico = models.ForeignKey(Medico, on_delete=models.CASCADE)
+    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='citas')
+    medico = models.ForeignKey(Medico, on_delete=models.CASCADE, related_name='citas')
     fecha = models.DateTimeField()
     motivo = models.TextField(blank=True)
 
     def __str__(self):
-        return f"Cita: {self.paciente} - {self.medico} el {self.fecha}"
+        return f"Cita: {self.paciente} con {self.medico} el {self.fecha}"
+from django import forms
+from .models import Cita
+
+class CitaForm(forms.ModelForm):
+    class Meta:
+        model = Cita
+        fields = ['paciente', 'medico', 'fecha', 'motivo']
+

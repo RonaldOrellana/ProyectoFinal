@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2>Detalles de la Cita</h2>
+    <ul class="list-group">
+        <li class="list-group-item"><strong>Paciente:</strong> {{ cita.paciente.nombre }} {{ cita.paciente.apellido }}</li>
+        <li class="list-group-item"><strong>Médico:</strong> {{ cita.medico.nombre }} {{ cita.medico.apellido }}</li>
+        <li class="list-group-item"><strong>Fecha y Hora:</strong> {{ cita.fecha|date:"d/m/Y H:i" }}</li>
+        <li class="list-group-item"><strong>Motivo:</strong> {{ cita.motivo }}</li>
+    </ul>
+    <a href="{% url 'citas_lista' %}" class="btn btn-secondary mt-3">🔙 Volver</a>
+</div>
+{% endblock %}

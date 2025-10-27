@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-center text-danger">Eliminar Cita</h2>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <p>¿Estás seguro que deseas eliminar la cita de <strong>{{ cita.paciente.nombre }} {{ cita.paciente.apellido }}</strong> con el médico <strong>{{ cita.medico.nombre }} {{ cita.medico.apellido }}</strong> programada para <strong>{{ cita.fecha }}</strong>?</p>
+            
+            <form method="post">
+                {% csrf_token %}
+                <div class="d-flex justify-content-center gap-3">
+                    <button type="submit" class="btn btn-danger">❌ Eliminar</button>
+                    <a href="{% url 'citas_lista' %}" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

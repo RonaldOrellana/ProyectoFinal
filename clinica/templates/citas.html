@@ -1,11 +1,64 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>Citas</h2>
-<ul>
-    {% for c in citas %}
-    <li>{{ c.fecha }} — {{ c.paciente }} con {{ c.medico }}</li>
-    {% empty %}
-    <li>No hay citas.</li>
-    {% endfor %}
-</ul>
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-lg border-0 rounded-4">
+            <div class="card-header bg-primary text-white text-center rounded-top-4">
+                <h3 class="mb-0">Registrar Nueva Cita</h3>
+            </div>
+            <div class="card-body p-4">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} text-center">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="{{ form.paciente.id_for_label }}" class="form-label fw-semibold">Paciente</label>
+                        <div class="d-flex">
+                            {{ form.paciente }}
+                            <a href="{% url 'crear_paciente' %}" class="btn btn-outline-primary ms-2">➕ Nuevo</a>
+                        </div>
+                        {% if form.paciente.errors %}
+                            <div class="text-danger small">{{ form.paciente.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.medico.id_for_label }}" class="form-label fw-semibold">Médico</label>
+                        {{ form.medico }}
+                        {% if form.medico.errors %}
+                            <div class="text-danger small">{{ form.medico.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.fecha.id_for_label }}" class="form-label fw-semibold">Fecha y Hora</label>
+                        {{ form.fecha }}
+                        {% if form.fecha.errors %}
+                            <div class="text-danger small">{{ form.fecha.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.motivo.id_for_label }}" class="form-label fw-semibold">Motivo</label>
+                        {{ form.motivo }}
+                        {% if form.motivo.errors %}
+                            <div class="text-danger small">{{ form.motivo.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success btn-lg rounded-pill">💾 Guardar Cita</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

@@ -3,12 +3,12 @@ from .models import Paciente, Medico, Cita, Servicio
 
 @admin.register(Paciente)
 class PacienteAdmin(admin.ModelAdmin):
-    list_display = ('nombre', 'apellido', 'correo', 'telefono')
-    search_fields = ('nombre', 'apellido', 'correo')
+    list_display = ('nombre', 'apellido', 'telefono')  # quitamos correo
+    search_fields = ('nombre', 'apellido', 'telefono')
 
 @admin.register(Medico)
 class MedicoAdmin(admin.ModelAdmin):
-    list_display = ('nombre', 'apellido', 'especialidad', 'correo')
+    list_display = ('nombre', 'apellido', 'especialidad')
     search_fields = ('nombre', 'apellido', 'especialidad')
 
 @admin.register(Servicio)

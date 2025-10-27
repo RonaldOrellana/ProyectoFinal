@@ -1,11 +1,21 @@
 {% extends 'base.html' %}
+
 {% block content %}
 <h2>Médicos</h2>
 <ul>
     {% for m in medicos %}
-    <li>{{ m.nombre }} {{ m.apellido }} — {{ m.especialidad }}</li>
+        <li>{{ m.nombre }} {{ m.apellido }} — {{ m.especialidad }}</li>
     {% empty %}
-    <li>No hay médicos registrados.</li>
+        <li>No hay médicos registrados.</li>
+    {% endfor %}
+</ul>
+
+<h2>Servicios de Dr. {{ medico.nombre }} {{ medico.apellido }}</h2>
+<ul>
+    {% for servicio in medico.servicios.all %}
+        <li>{{ servicio.nombre }} - ${{ servicio.precio }}</li>
+    {% empty %}
+        <li>No hay servicios registrados.</li>
     {% endfor %}
 </ul>
 {% endblock %}
