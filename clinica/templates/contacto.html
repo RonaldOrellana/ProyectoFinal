@@ -117,18 +117,32 @@ body {
     <div class="col-md-7">
       <div class="contact-card h-100">
         <h4 class="text-primary fw-bold mb-4">Envíanos un Mensaje</h4>
-        <form>
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+        <form method="post" novalidate>
+          {% csrf_token %}
           <div class="mb-3">
             <label class="form-label fw-semibold">Nombre</label>
-            <input type="text" class="form-control" placeholder="Tu nombre completo">
+            {{ form.nombre }}
+            {% if form.nombre.errors %}<div class="text-danger small">{{ form.nombre.errors }}</div>{% endif %}
           </div>
           <div class="mb-3">
             <label class="form-label fw-semibold">Correo Electrónico</label>
-            <input type="email" class="form-control" placeholder="ejemplo@correo.com">
+            {{ form.email }}
+            {% if form.email.errors %}<div class="text-danger small">{{ form.email.errors }}</div>{% endif %}
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Asunto</label>
+            {{ form.asunto }}
+            {% if form.asunto.errors %}<div class="text-danger small">{{ form.asunto.errors }}</div>{% endif %}
           </div>
           <div class="mb-3">
             <label class="form-label fw-semibold">Mensaje</label>
-            <textarea class="form-control" rows="4" placeholder="Escribe tu mensaje..."></textarea>
+            {{ form.mensaje }}
+            {% if form.mensaje.errors %}<div class="text-danger small">{{ form.mensaje.errors }}</div>{% endif %}
           </div>
           <div class="text-end">
             <button type="submit" class="btn btn-primary btn-modern px-4">

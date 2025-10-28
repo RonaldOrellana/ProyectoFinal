@@ -8,6 +8,8 @@ class Paciente(models.Model):
     dui = models.CharField(max_length=10, unique=True)
     telefono = models.CharField(max_length=9, blank=True, null=True)
     direccion = models.CharField(max_length=200, blank=True, null=True)
+    edad = models.PositiveIntegerField(blank=True, null=True)
+    medico = models.ForeignKey('Medico', on_delete=models.SET_NULL, blank=True, null=True, related_name='pacientes')
 
     def __str__(self):
         return f"{self.nombre} {self.apellido}"
@@ -43,6 +45,18 @@ class Cita(models.Model):
 
     def __str__(self):
         return f"Cita: {self.paciente} con {self.medico} el {self.fecha}"
+
+
+# Mensajes de contacto enviados desde la web
+class ContactMessage(models.Model):
+    nombre = models.CharField(max_length=150)
+    email = models.EmailField()
+    asunto = models.CharField(max_length=200, blank=True)
+    mensaje = models.TextField()
+    creado_en = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.nombre} <{self.email}> - {self.asunto or 'Sin asunto'}"
 from django import forms
 from .models import Cita
 

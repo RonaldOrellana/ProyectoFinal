@@ -12,7 +12,7 @@
                 {% csrf_token %}
                 <div class="d-flex justify-content-center gap-3">
                     <button type="submit" class="btn btn-danger">❌ Eliminar</button>
-                    <a href="{'citas_lista' }" class="btn btn-secondary">Cancelar</a>
+                    <a href="{% url 'citas' %}" class="btn btn-secondary">Cancelar</a>
                 </div>
             </form>
         </div>

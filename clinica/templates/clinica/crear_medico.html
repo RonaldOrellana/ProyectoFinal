@@ -8,8 +8,8 @@
         <div class="col-lg-6 col-md-8">
             <div class="card border-0 shadow-lg rounded-4">
                 <div class="card-header text-white text-center py-3"
-                     style="background: linear-gradient(90deg, #0062E6, #33AEFF);">
-                    <h3 class="fw-bold mb-0">🩺 Registrar Nuevo Paciente</h3>
+                     style="background: linear-gradient(90deg, #198754, #20c997);">
+                    <h3 class="fw-bold mb-0">👨‍⚕️ Registrar Nuevo Médico</h3>
                 </div>
 
                 <div class="card-body p-4">
@@ -35,27 +35,28 @@
                             </div>
                         </div>
 
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Especialidad</label>
+                            {{ form.especialidad|add_class:"form-control form-control-lg shadow-sm" }}
+                        </div>
+
                         <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold">DUI</label>
-                                {{ form.dui|add_class:"form-control form-control-lg shadow-sm" }}
-                            </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-semibold">Teléfono</label>
                                 {{ form.telefono|add_class:"form-control form-control-lg shadow-sm" }}
                             </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold">Correo</label>
+                                {{ form.correo|add_class:"form-control form-control-lg shadow-sm" }}
+                            </div>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold">Dirección</label>
-                            {{ form.direccion|add_class:"form-control form-control-lg shadow-sm" }}
-                        </div>
-
-                        <div class="d-grid mt-4">
-                            <button type="submit" 
-                                    class="btn btn-lg text-white fw-bold rounded-pill py-3 shadow"
-                                    style="background: linear-gradient(90deg, #33AEFF, #0062E6); border: none;">
-                                💾 Guardar Paciente
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="{% url 'medicos' %}" class="btn btn-outline-secondary btn-lg px-4">
+                                <i class="bi bi-arrow-left me-2"></i>Volver
+                            </a>
+                            <button type="submit" class="btn btn-success btn-lg px-4">
+                                <i class="bi bi-plus-circle me-2"></i>Guardar Médico
                             </button>
                         </div>
                     </form>
@@ -76,10 +77,9 @@
         from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
     }
-    button:hover {
-        opacity: 0.9;
-        transform: scale(1.02);
-        transition: 0.2s;
+    .btn:hover {
+        transform: translateY(-2px);
+        transition: all 0.3s ease;
     }
 </style>
 

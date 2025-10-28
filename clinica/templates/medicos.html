@@ -117,7 +117,7 @@ body {
   <!-- 🔍 Barra superior -->
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h4 class="fw-bold text-secondary mb-0">Equipo Médico</h4>
-    <a href="{'crear_medico' }" class="btn btn-primary btn-modern shadow-sm px-4">
+    <a href="{% url 'crear_medico' %}" class="btn btn-primary btn-modern shadow-sm px-4">
       <i class="bi bi-person-plus-fill me-2"></i> Nuevo Médico
     </a>
   </div>
@@ -144,10 +144,9 @@ body {
       </div>
 
       <div class="p-3 border-top d-flex justify-content-between">
-        <a href="{'editar_medico' medico.id }" class="btn btn-outline-primary btn-modern btn-sm px-3">
-          <i class="bi bi-pencil"></i> Editar
-        </a>
-        <a href="{'eliminar_medico' medico.id }" class="btn btn-outline-danger btn-modern btn-sm px-3">
+        <a href="{% url 'eliminar_medico' medico.id %}" 
+          onclick="return confirm('¿Estás seguro de que deseas eliminar al Dr. {{ medico.nombre }} {{ medico.apellido }}?');"
+          class="btn btn-outline-danger btn-modern btn-sm px-3">
           <i class="bi bi-trash"></i> Eliminar
         </a>
       </div>

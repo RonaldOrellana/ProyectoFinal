@@ -17,7 +17,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'clinica',
-
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
@@ -55,7 +55,7 @@ DATABASES = {
         'ENGINE': 'mssql',
         'NAME': 'ClinicaBD',
         'HOST': 'DESKTOP-FLPOK2F\\SQLEXPRESS01',
-        'PORT': '',
+        'PORT': '',  
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',
         },

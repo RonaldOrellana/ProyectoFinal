@@ -8,6 +8,6 @@
         <li class="list-group-item"><strong>Fecha y Hora:</strong> {{ cita.fecha|date:"d/m/Y H:i" }}</li>
         <li class="list-group-item"><strong>Motivo:</strong> {{ cita.motivo }}</li>
     </ul>
-    <a href="{'citas_lista'}" class="btn btn-secondary mt-3">🔙 Volver</a>
+    <a href="{% url 'citas' %}" class="btn btn-secondary mt-3">🔙 Volver</a>
 </div>
 {% endblock %}

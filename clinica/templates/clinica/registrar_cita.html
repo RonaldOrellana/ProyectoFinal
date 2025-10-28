@@ -45,6 +45,13 @@
           <!-- CITA -->
           <div class="col-md-6">
             <h5 class="text-primary mb-3">📅 Información de la Cita</h5>
+            {% if selected_servicio %}
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Servicio solicitado</label>
+              <div class="alert alert-info py-2">{{ selected_servicio }}</div>
+            </div>
+            {% endif %}
+
             <div class="mb-3">
               <label class="form-label fw-semibold">Médico</label>
               {{ cita_form.medico }}
@@ -64,7 +71,7 @@
           <button type="submit" class="btn btn-success btn-lg rounded-pill px-5 shadow-sm">
             💾 Guardar Cita
           </button>
-          <a href="{ 'citas_lista' }" class="btn btn-outline-secondary btn-lg rounded-pill px-4 ms-2">
+          <a href="{% url 'citas' %}" class="btn btn-outline-secondary btn-lg rounded-pill px-4 ms-2">
             🔙 Cancelar
           </a>
         </div>

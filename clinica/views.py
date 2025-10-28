@@ -2,30 +2,81 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.http import JsonResponse
 from .models import Paciente, Medico, Cita, Servicio
-from .forms import PacienteForm, CitaForm
+from .forms import PacienteForm, CitaForm, MedicoForm
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 from datetime import datetime
 
 # -----------------------------
 # VISTAS PRINCIPALES
 # -----------------------------
 def index(request):
-    servicios = Servicio.objects.all()[:8]
-    return render(request, 'index.html', {'servicios': servicios})
+    return render(request, 'index.html')
 
 def pacientes(request):
-    pacientes = Paciente.objects.all()
+    # Añadimos anotaciones para mostrar el último médico que atendió a cada paciente
+    from django.db.models import OuterRef, Subquery
+
+    # Subquery para obtener la última cita por fecha para cada paciente
+    last_cita_qs = Cita.objects.filter(paciente=OuterRef('pk')).order_by('-fecha')
+
+    pacientes = Paciente.objects.all().annotate(
+        last_medico_nombre=Subquery(last_cita_qs.values('medico__nombre')[:1]),
+        last_medico_apellido=Subquery(last_cita_qs.values('medico__apellido')[:1])
+    )
+
     return render(request, 'pacientes.html', {'pacientes': pacientes})
 
 def medicos(request):
-    medicos = Medico.objects.all()
+    medicos = Medico.objects.all().order_by('apellido')
     return render(request, 'medicos.html', {'medicos': medicos})
+
+def crear_medico(request):
+    if request.method == 'POST':
+        form = MedicoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, '✅ Médico registrado correctamente.')
+            return redirect('medicos')
+        else:
+            messages.error(request, '⚠️ Por favor corrige los errores en el formulario.')
+    else:
+        form = MedicoForm()
+    return render(request, 'clinica/crear_medico.html', {'form': form})
+
+def eliminar_medico(request, medico_id):
+    try:
+        medico = get_object_or_404(Medico, id=medico_id)
+        nombre_medico = f"Dr. {medico.nombre} {medico.apellido}"
+        medico.delete()
+        messages.success(request, f'✅ El médico {nombre_medico} ha sido eliminado correctamente.')
+    except Exception as e:
+        messages.error(request, '❌ No se pudo eliminar el médico. Puede tener citas asociadas.')
+    return redirect('medicos')
 
 def citas_lista(request):
     citas = Cita.objects.all().order_by('-fecha')
     return render(request, 'clinica/citas_lista.html', {'citas': citas})
 
+from .forms import PacienteForm, CitaForm, MedicoForm
+from .forms import ContactForm
+
+
 def contacto(request):
-    return render(request, 'contacto.html')
+    """Formulario de contacto: guarda el mensaje en la base de datos."""
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            contacto = form.save()
+            messages.success(request, '✅ Mensaje enviado. Gracias por contactarnos.')
+            return redirect('contacto')
+        else:
+            messages.error(request, '⚠️ Por favor corrige los errores del formulario.')
+    else:
+        form = ContactForm()
+    return render(request, 'contacto.html', {'form': form})
 
 # -----------------------------
 # PACIENTES
@@ -123,6 +174,18 @@ def registrar_cita(request):
     pacientes = Paciente.objects.all().order_by('nombre')
     medicos = Medico.objects.all().order_by('nombre')
 
+    # Preseleccionar servicio/medico si viene en query string ?servicio=Nombre
+    selected_servicio_name = request.GET.get('servicio') if request.method == 'GET' else None
+    selected_servicio_obj = None
+    initial_cita = {}
+    if selected_servicio_name:
+        try:
+            selected_servicio_obj = Servicio.objects.filter(nombre__iexact=selected_servicio_name).first() or Servicio.objects.filter(nombre__icontains=selected_servicio_name).first()
+            if selected_servicio_obj and getattr(selected_servicio_obj, 'medico', None):
+                initial_cita['medico'] = selected_servicio_obj.medico.id
+        except Exception:
+            selected_servicio_obj = None
+
     if request.method == 'POST':
         cita_form = CitaForm(request.POST)
         paciente_form = PacienteForm(request.POST)
@@ -131,38 +194,107 @@ def registrar_cita(request):
         if paciente_form.is_valid() and cita_form.is_valid():
             # Guardar nuevo paciente
             nuevo_paciente = paciente_form.save()
-            
+
             # Asignar el paciente recién creado a la cita
             cita = cita_form.save(commit=False)
             cita.paciente = nuevo_paciente
             cita.save()
 
             messages.success(request, "✅ Cita y paciente registrados correctamente.")
-            return redirect('citas_lista')
+            return redirect('citas')
         else:
             messages.error(request, "⚠️ Verifica los datos ingresados.")
     else:
-        cita_form = CitaForm()
+        cita_form = CitaForm(initial=initial_cita)
         paciente_form = PacienteForm()
 
     return render(request, 'clinica/registrar_cita.html', {
         'cita_form': cita_form,
         'paciente_form': paciente_form,
         'pacientes': pacientes,
-        'medicos': medicos
+        'medicos': medicos,
+        'selected_servicio': selected_servicio_obj.nombre if selected_servicio_obj else selected_servicio_name
     })
 
 
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
-from .models import Medico
 
-def eliminar_medico(request, id):
-    medico = get_object_or_404(Medico, id=id)
+def editar_paciente(request, paciente_id):
+    try:
+        paciente = get_object_or_404(Paciente, id=paciente_id)
+        if request.method == 'POST':
+            form = PacienteForm(request.POST, instance=paciente)
+            if form.is_valid():
+                form.save()
+                messages.success(request, '✅ Paciente actualizado correctamente.')
+                return redirect('pacientes')
+            else:
+                messages.error(request, '⚠️ Por favor verifica los datos ingresados.')
+        else:
+            form = PacienteForm(instance=paciente)
+        
+        return render(request, 'clinica/editar_paciente.html', {
+            'form': form,
+            'paciente': paciente
+        })
+    except Exception as e:
+        messages.error(request, f'❌ Error al editar el paciente: {str(e)}')
+        return redirect('pacientes')
 
+def eliminar_paciente(request, paciente_id):
+    paciente = get_object_or_404(Paciente, id=paciente_id)
+    paciente.delete()
+    messages.success(request, "✅ Paciente eliminado correctamente.")
+    return redirect('pacientes')
+
+
+def iniciar_sesion(request):
+    """Vista para iniciar sesión de usuarios con username y password."""
     if request.method == 'POST':
-        medico.delete()
-        messages.success(request, '✅ El médico fue eliminado correctamente.')
-        return redirect('medicos')
+        username = request.POST.get('username', '').strip()
+        password = request.POST.get('password', '').strip()
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            auth_login(request, user)
+            messages.success(request, '✅ Has iniciado sesión correctamente.')
+            # redirigir a next si existe
+            next_url = request.GET.get('next') or request.POST.get('next') or 'index'
+            return redirect(next_url)
+        else:
+            messages.error(request, '❌ Usuario o contraseña incorrectos.')
+            return render(request, 'clinica/iniciar_sesion.html', {'username': username})
+    else:
+        return render(request, 'clinica/iniciar_sesion.html')
 
-    return render(request, 'clinica/eliminar_medico.html', {'medico': medico})
+
+def cerrar_sesion(request):
+    """Cerrar sesión y redirigir a la página principal."""
+    auth_logout(request)
+    messages.success(request, '✅ Has cerrado sesión correctamente.')
+    return redirect('index')
+
+
+def registro(request):
+    """Registro rápido de usuarios usando UserCreationForm.
+    Después del registro se autentica al usuario y se redirige al índice.
+    """
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            # opción: agregar email si fue provisto
+            email = request.POST.get('email')
+            if email:
+                user.email = email
+                user.save()
+            # iniciar sesión automáticamente
+            auth_user = authenticate(request, username=user.username, password=request.POST.get('password1'))
+            if auth_user is not None:
+                auth_login(request, auth_user)
+            messages.success(request, '✅ Registro completado. Bienvenido.')
+            return redirect('index')
+        else:
+            messages.error(request, '⚠️ Por favor corrige los errores del formulario de registro.')
+    else:
+        form = UserCreationForm()
+    return render(request, 'clinica/registro.html', {'form': form})
+

@@ -1,9 +1,10 @@
 from django.contrib import admin
 from .models import Paciente, Medico, Cita, Servicio
+from .models import ContactMessage
 
 @admin.register(Paciente)
 class PacienteAdmin(admin.ModelAdmin):
-    list_display = ('nombre', 'apellido', 'telefono')  # quitamos correo
+    list_display = ('nombre', 'apellido', 'telefono', 'edad', 'medico')
     search_fields = ('nombre', 'apellido', 'telefono')
 
 @admin.register(Medico)
@@ -19,3 +20,10 @@ class ServicioAdmin(admin.ModelAdmin):
 class CitaAdmin(admin.ModelAdmin):
     list_display = ('paciente', 'medico', 'fecha')
     list_filter = ('fecha',)
+
+
+@admin.register(ContactMessage)
+class ContactMessageAdmin(admin.ModelAdmin):
+    list_display = ('nombre', 'email', 'asunto', 'creado_en')
+    search_fields = ('nombre', 'email', 'mensaje', 'asunto')
+    readonly_fields = ('creado_en',)

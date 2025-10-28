@@ -8,17 +8,28 @@ urlpatterns = [
     path('pacientes/', views.pacientes, name='pacientes'),
     path('pacientes/nuevo/', views.crear_paciente, name='crear_paciente'),
     path('pacientes/nuevo/ajax/', views.crear_paciente_ajax, name='crear_paciente_ajax'),
+    path('pacientes/<int:paciente_id>/editar/', views.editar_paciente, name='editar_paciente'),
+    path('pacientes/<int:paciente_id>/eliminar/', views.eliminar_paciente, name='eliminar_paciente'),
+
 
     # Médicos
     path('medicos/', views.medicos, name='medicos'),
+    path('medicos/nuevo/', views.crear_medico, name='crear_medico'),
+    path('medicos/<int:medico_id>/eliminar/', views.eliminar_medico, name='eliminar_medico'),
 
     # Citas
-    path('citas/', views.citas_lista, name='citas'),  # Lista de citas
-    path('citas/nueva/', views.registrar_cita, name='registrar_cita'),  # Registrar nueva cita
+    path('citas/', views.citas_lista, name='citas'),  # ✅ correcto
+    path('citas/nueva/', views.registrar_cita, name='registrar_cita'),
     path('citas/<int:cita_id>/', views.ver_cita, name='ver_cita'),
     path('citas/<int:cita_id>/editar/', views.editar_cita, name='editar_cita'),
     path('citas/<int:cita_id>/eliminar/', views.eliminar_cita, name='eliminar_cita'),
 
     # Contacto
     path('contacto/', views.contacto, name='contacto'),
+
+    # Autenticación
+    path('login/', views.iniciar_sesion, name='login'),
+    path('logout/', views.cerrar_sesion, name='logout'),
+    path('registro/', views.registro, name='registro'),
+
 ]

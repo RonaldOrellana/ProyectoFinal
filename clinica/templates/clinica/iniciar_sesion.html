@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+  .login-hero {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+  }
+  .login-card {
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .login-aside {
+    background: linear-gradient(135deg,#0052d4 0%,#4364f7 50%,#6fb1fc 100%);
+    color: white;
+    padding: 36px;
+  }
+  .brand-logo {
+    font-weight: 700;
+    letter-spacing: .4px;
+    font-size: 1.25rem;
+  }
+  .input-icon { width:40px; }
+</style>
+
+<div class="container login-hero">
+  <div class="row justify-content-center w-100">
+    <div class="col-lg-6 col-md-8">
+      <div class="card login-card shadow-sm d-flex flex-row">
+        <div class="login-aside d-none d-md-flex flex-column justify-content-center col-md-5">
+          <div>
+            <div class="mb-3 brand-logo">Clínica Salud</div>
+            <h5 class="fw-semibold">Accede a tu cuenta</h5>
+            <p class="small opacity-75">Gestiona citas, pacientes y mensajería desde un solo lugar.</p>
+          </div>
+        </div>
+
+        <div class="card-body col-12 col-md-7 p-4">
+          <div class="mb-3 text-center d-md-none">
+            <div class="brand-logo">Clínica Salud</div>
+            <p class="small text-muted mb-0">Inicia sesión para continuar</p>
+          </div>
+
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+
+          <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+
+            <div class="mb-3">
+              <label for="id_username" class="form-label small fw-medium">Usuario</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-0 input-icon"><i class="bi bi-person"></i></span>
+                <input id="id_username" name="username" type="text" class="form-control border-start-0" value="{{ username|default:'' }}" placeholder="Tu usuario" required>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="id_password" class="form-label small fw-medium">Contraseña</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-0 input-icon"><i class="bi bi-lock"></i></span>
+                <input id="id_password" name="password" type="password" class="form-control border-start-0" placeholder="Contraseña" required>
+              </div>
+            </div>
+
+            {% if request.GET.next %}
+              <input type="hidden" name="next" value="{{ request.GET.next }}">
+            {% endif %}
+
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="1" id="remember_me" name="remember_me">
+                <label class="form-check-label small" for="remember_me">Recordarme</label>
+              </div>
+              <a href="#" class="small text-decoration-none">¿Olvidaste tu contraseña?</a>
+            </div>
+
+            <div class="d-grid gap-2 mt-4">
+              <button type="submit" class="btn btn-primary btn-lg">Iniciar sesión</button>
+            </div>
+
+            <div class="text-center mt-3">
+              <small class="text-muted">¿No tienes cuenta? <a href="{% url 'registro' %}">Regístrate</a></small>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
