@@ -40,6 +40,7 @@ class Servicio(models.Model):
 class Cita(models.Model):
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='citas')
     medico = models.ForeignKey(Medico, on_delete=models.CASCADE, related_name='citas')
+    servicio = models.ForeignKey(Servicio, on_delete=models.SET_NULL, null=True, blank=True, related_name='citas')
     fecha = models.DateTimeField()
     motivo = models.TextField(blank=True)
 

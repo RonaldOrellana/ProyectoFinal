@@ -1,0 +1,75 @@
+/* Tema morado / arcoíris - theme_morado.css */
+:root {
+  --purple-1: #6a00f4;
+  --purple-2: #9b4dff;
+  --lilac: #cfa3ff;
+  --accent-rainbow: linear-gradient(90deg, #8e2de2, #c86dd7, #ff6a88, #ffb86b);
+}
+
+/* Navbar */
+.navbar.bg-primary {
+  background: linear-gradient(135deg, var(--purple-1), var(--purple-2)) !important;
+}
+
+.navbar-dark .navbar-brand,
+.navbar-dark .nav-link {
+  color: white !important;
+}
+
+/* Hero/header */
+.hero-section, .header-section {
+  background: linear-gradient(135deg, #6a00f4 0%, #b76bff 50%, #ff9ad1 100%) !important;
+  color: white !important;
+}
+
+/* Botones */
+.btn-primary {
+  background: var(--accent-rainbow) !important;
+  border: none !important;
+  color: white !important;
+}
+
+/* Textos */
+.text-primary { 
+  color: var(--purple-1) !important; 
+}
+
+/* Cards */
+.card {
+  background: white !important;
+  border-radius: 15px !important;
+}
+
+.card-header.bg-primary {
+  background: linear-gradient(135deg, var(--purple-1), var(--purple-2)) !important;
+  color: white !important;
+}
+
+/* Badges */
+.badge-confirmada { background: #4caf50 !important; color: white !important; }
+.badge-pendiente { background: #ff9800 !important; color: white !important; }
+.badge-cancelada { background: #f44336 !important; color: white !important; }
+
+/* Forms */
+.form-control, select, textarea {
+  border-color: var(--purple-2) !important;
+  background: white !important;
+  color: black !important;
+}
+
+.form-label {
+  color: var(--purple-1) !important;
+  font-weight: 600;
+}
+
+/* Footer */
+footer.bg-dark {
+  background: linear-gradient(90deg, #2c0a59, #6a00f4) !important;
+  color: white !important;
+}
+
+/* Links */
+a:hover {
+  color: var(--purple-2) !important;
+}
+

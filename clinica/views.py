@@ -13,7 +13,21 @@ from datetime import datetime
 # VISTAS PRINCIPALES
 # -----------------------------
 def index(request):
-    return render(request, 'index.html')
+    from django.db.models import Sum
+    from django.utils import timezone
+    citas = Cita.objects.all()
+    total_citas = citas.count()
+    total_citas_proximas = citas.filter(fecha__gt=timezone.now()).count()
+    total_citas_hoy = citas.filter(fecha__date=timezone.now().date()).count()
+    total_citas_realizadas = citas.filter(fecha__lt=timezone.now()).count()
+    total_costos = citas.aggregate(total=Sum('servicio__precio'))['total'] or 0
+    return render(request, 'index.html', {
+        'total_citas': total_citas,
+        'total_citas_proximas': total_citas_proximas,
+        'total_citas_hoy': total_citas_hoy,
+        'total_citas_realizadas': total_citas_realizadas,
+        'total_costos': total_costos
+    })
 
 def pacientes(request):
     # Añadimos anotaciones para mostrar el último médico que atendió a cada paciente
@@ -30,8 +44,23 @@ def pacientes(request):
     return render(request, 'pacientes.html', {'pacientes': pacientes})
 
 def medicos(request):
+    from django.db.models import Sum, Count
+    from django.utils import timezone
     medicos = Medico.objects.all().order_by('apellido')
-    return render(request, 'medicos.html', {'medicos': medicos})
+    citas = Cita.objects.all()
+    total_citas = citas.count()
+    total_citas_proximas = citas.filter(fecha__gt=timezone.now()).count()
+    total_citas_hoy = citas.filter(fecha__date=timezone.now().date()).count()
+    total_citas_realizadas = citas.filter(fecha__lt=timezone.now()).count()
+    total_costos = citas.aggregate(total=Sum('servicio__precio'))['total'] or 0
+    return render(request, 'medicos.html', {
+        'medicos': medicos,
+        'total_citas': total_citas,
+        'total_citas_proximas': total_citas_proximas,
+        'total_citas_hoy': total_citas_hoy,
+        'total_citas_realizadas': total_citas_realizadas,
+        'total_costos': total_costos
+    })
 
 def crear_medico(request):
     if request.method == 'POST':
@@ -57,8 +86,44 @@ def eliminar_medico(request, medico_id):
     return redirect('medicos')
 
 def citas_lista(request):
+    from django.db.models import Sum
+    from django.utils import timezone
     citas = Cita.objects.all().order_by('-fecha')
-    return render(request, 'clinica/citas_lista.html', {'citas': citas})
+    total_citas = citas.count()
+    total_citas_proximas = citas.filter(fecha__gt=timezone.now()).count()
+    total_citas_hoy = citas.filter(fecha__date=timezone.now().date()).count()
+    total_citas_realizadas = citas.filter(fecha__lt=timezone.now()).count()
+    total_costos = citas.aggregate(total=Sum('servicio__precio'))['total'] or 0
+    # comprobar si el usuario desbloqueó las estadísticas con PIN
+    stats_unlocked = request.session.get('stats_unlocked', False)
+    return render(request, 'clinica/citas_lista.html', {
+        'citas': citas,
+        'total_citas': total_citas,
+        'total_citas_proximas': total_citas_proximas,
+        'total_citas_hoy': total_citas_hoy,
+        'total_citas_realizadas': total_citas_realizadas,
+        'total_costos': total_costos,
+        'stats_unlocked': stats_unlocked
+    })
+
+
+def unlock_stats(request):
+    """Comprueba el PIN (123) y guarda la bandera en la sesión para mostrar estadísticas."""
+    if request.method == 'POST':
+        pin = request.POST.get('pin', '').strip()
+        if pin == '123':
+            request.session['stats_unlocked'] = True
+            messages.success(request, '✅ Estadísticas desbloqueadas.')
+        else:
+            messages.error(request, '❌ PIN incorrecto.')
+    return redirect('citas')
+
+
+def lock_stats(request):
+    """Quita la bandera de sesión que permite ver estadísticas."""
+    request.session.pop('stats_unlocked', None)
+    messages.info(request, '🔒 Estadísticas ocultadas.')
+    return redirect('citas')
 
 from .forms import PacienteForm, CitaForm, MedicoForm
 from .forms import ContactForm

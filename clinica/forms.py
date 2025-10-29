@@ -50,10 +50,11 @@ class PacienteForm(forms.ModelForm):
 class CitaForm(forms.ModelForm):
     class Meta:
         model = Cita
-        fields = ['paciente', 'medico', 'fecha', 'motivo']
+        fields = ['paciente', 'medico', 'servicio', 'fecha', 'motivo']
         widgets = {
             'paciente': forms.Select(attrs={'class': 'form-select'}),
             'medico': forms.Select(attrs={'class': 'form-select'}),
+            'servicio': forms.Select(attrs={'class': 'form-select'}),
             'fecha': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
             'motivo': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Motivo de la cita'})
         }

@@ -27,6 +27,10 @@ urlpatterns = [
     # Contacto
     path('contacto/', views.contacto, name='contacto'),
 
+    # desbloquear/ocultar estadísticas (PIN)
+    path('citas/unlock/', views.unlock_stats, name='unlock_stats'),
+    path('citas/lock/', views.lock_stats, name='lock_stats'),
+
     # Autenticación
     path('login/', views.iniciar_sesion, name='login'),
     path('logout/', views.cerrar_sesion, name='logout'),

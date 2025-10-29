@@ -6,9 +6,8 @@ body {
   font-family: 'Poppins', sans-serif;
 }
 
-/* 🩵 Encabezado */
-.contact-header {
-  background: linear-gradient(135deg, #007bff, #004e92);
+/* Encabezado: usar la clase global header-section para heredar el tema morado */
+.header-section {
   color: white;
   border-radius: 25px;
   padding: 60px 20px;
@@ -17,14 +16,14 @@ body {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
-.contact-header h1 {
+.header-section h1 {
   font-size: 2.8rem;
   font-weight: 700;
 }
 
-.contact-header p {
+.header-section p {
   font-size: 1.2rem;
-  opacity: 0.9;
+  opacity: 0.95;
 }
 
 /* 📬 Tarjeta de contacto */
@@ -82,7 +81,7 @@ body {
 </style>
 
 <!-- 🌐 Encabezado -->
-<section class="contact-header fade-in">
+<section class="header-section fade-in">
   <h1>📞 Contáctanos</h1>
   <p>Estamos aquí para ayudarte. Escríbenos o visítanos en la clínica.</p>
 </section>
@@ -104,7 +103,7 @@ body {
         </div>
         <div class="contact-info mb-3 d-flex align-items-center">
           <i class="bi bi-geo-alt-fill me-3"></i>
-          <span><strong>Dirección:</strong> San Salvador, El Salvador</span>
+          <span><strong>Dirección:</strong> Chalatenango, El Salvador</span>
         </div>
         <hr>
         <h5 class="text-secondary fw-semibold mb-2">Horario de Atención</h5>
