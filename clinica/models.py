@@ -61,8 +61,19 @@ class ContactMessage(models.Model):
 from django import forms
 from .models import Cita
 
+from django import forms
+from .models import Cita, Medico
+
 class CitaForm(forms.ModelForm):
     class Meta:
         model = Cita
-        fields = ['paciente', 'medico', 'fecha', 'motivo']
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Mostrar solo una especialidad única (sin repetir)
+        especialidades = Medico.objects.values_list('especialidad', flat=True).distinct()
+        self.fields['medico'].queryset = Medico.objects.filter(especialidad__in=especialidades).distinct()
+        # Mostrar el nombre de la especialidad en lugar del nombre del médico
+        self.fields['medico'].label_from_instance = lambda obj: obj.especialidad
 

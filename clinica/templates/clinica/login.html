@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+/* 🔹 Oculta la barra superior del base.html */
+header, nav, .navbar {
+    display: none !important;
+}
+
+/* 🔹 Asegura que el fondo cubra toda la pantalla */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* 🔹 Fondo celeste animado */
+.login-bg {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(-45deg, #00c6ff, #0072ff, #00c6ff, #0072ff);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+@keyframes gradientBG {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+/* 🔹 Íconos médicos flotantes por toda la pantalla */
+.icon {
+    position: absolute;
+    width: 60px;
+    opacity: 0.4;
+    animation: moveIcon 20s linear infinite;
+}
+@keyframes moveIcon {
+    0% {
+        transform: translateY(100vh) translateX(0) rotate(0deg);
+    }
+    100% {
+        transform: translateY(-120vh) translateX(100px) rotate(360deg);
+    }
+}
+
+/* 🔹 Caja del login centrada */
+.login-container {
+    background: rgba(255, 255, 255, 0.92);
+    padding: 50px;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    z-index: 2;
+}
+
+.login-container h2 {
+    font-weight: bold;
+    color: #0072ff;
+    margin-bottom: 25px;
+}
+
+.login-container input {
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.login-container .btn {
+    border-radius: 10px;
+    padding: 10px;
+    font-weight: 600;
+}
+
+.switch-link {
+    margin-top: 15px;
+    display: block;
+    color: #0072ff;
+    font-weight: 600;
+    cursor: pointer;
+}
+</style>
+
+<div class="login-bg">
+    <!-- 🌟 Íconos flotantes -->
+    <img src="https://cdn-icons-png.flaticon.com/512/3774/3774299.png" class="icon" style="left:5%; animation-delay:0s;">
+    <img src="https://cdn-icons-png.flaticon.com/512/2966/2966484.png" class="icon" style="left:25%; animation-delay:3s;">
+    <img src="https://cdn-icons-png.flaticon.com/512/2966/2966485.png" class="icon" style="left:45%; animation-delay:6s;">
+    <img src="https://cdn-icons-png.flaticon.com/512/2966/2966487.png" class="icon" style="left:65%; animation-delay:9s;">
+    <img src="https://cdn-icons-png.flaticon.com/512/2966/2966488.png" class="icon" style="left:85%; animation-delay:12s;">
+
+    <!-- 🩺 Caja de Login -->
+    <div class="login-container">
+        <h2>👩‍⚕️ Iniciar Sesión</h2>
+        <form method="POST" action="{% url 'login' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <input type="text" name="username" class="form-control" placeholder="Usuario" required>
+            </div>
+            <div class="mb-3">
+                <input type="password" name="password" class="form-control" placeholder="Contraseña" required>
+            </div>
+            <button type="submit" name="login" class="btn btn-primary w-100">Ingresar</button>
+        </form>
+
+        <span class="switch-link" onclick="toggleRegister()">¿No tienes cuenta? Regístrate aquí</span>
+    </div>
+</div>
+
+<!-- 🔹 Modal de registro -->
+<div id="registerModal" class="login-bg" style="display:none;">
+    <img src="https://cdn-icons-png.flaticon.com/512/3774/3774299.png" class="icon" style="left:15%; animation-delay:2s;">
+    <img src="https://cdn-icons-png.flaticon.com/512/2966/2966484.png" class="icon" style="left:75%; animation-delay:5s;">
+
+    <div class="login-container">
+        <h2>🩺 Crear Cuenta</h2>
+        <form method="POST" action="{% url 'register' %}">   <!-- ✅ ahora apunta a la vista correcta -->
+
+            {% csrf_token %}
+            <div class="mb-3">
+                <input type="text" name="username" class="form-control" placeholder="Usuario" required>
+            </div>
+            <div class="mb-3">
+                <input type="email" name="email" class="form-control" placeholder="Correo electrónico" required>
+            </div>
+            <div class="mb-3">
+                <input type="password" name="password1" class="form-control" placeholder="Contraseña" required>
+            </div>
+            <div class="mb-3">
+                <input type="password" name="password2" class="form-control" placeholder="Confirmar contraseña" required>
+            </div>
+            <button type="submit" class="btn btn-success w-100">Registrarme</button>
+        </form>
+
+        <span class="switch-link" onclick="toggleLogin()">¿Ya tienes cuenta? Inicia sesión</span>
+    </div>
+</div>
+
+<script>
+function toggleRegister() {
+    document.querySelector('.login-bg').style.display = 'none';
+    document.querySelector('#registerModal').style.display = 'flex';
+}
+function toggleLogin() {
+    document.querySelector('#registerModal').style.display = 'none';
+    document.querySelector('.login-bg').style.display = 'flex';
+}
+</script>
+
+{% endblock %}

@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+/* Fondo suave */
+body {
+  background-color: #f9f9fb;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Contenedor principal */
+.edit-container {
+  max-width: 700px;
+  margin: 60px auto;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  padding: 40px 50px;
+  animation: fadeIn 0.4s ease;
+}
+
+/* Título */
+.edit-container h2 {
+  text-align: center;
+  font-weight: 700;
+  color: #4b0082;
+  margin-bottom: 30px;
+}
+
+/* Campos del formulario */
+form label {
+  font-weight: 600;
+  color: #333;
+}
+
+form input, form select, form textarea {
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  width: 100%;
+  margin-bottom: 15px;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+form input:focus, form select:focus, form textarea:focus {
+  border-color: #7b2ff7;
+  box-shadow: 0 0 6px rgba(123, 47, 247, 0.3);
+  outline: none;
+}
+
+/* Botones */
+.btn-primary {
+  background: linear-gradient(90deg, #7b2ff7, #f107a3);
+  border: none;
+  border-radius: 25px;
+  padding: 10px 25px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  transform: scale(1.05);
+  background: linear-gradient(90deg, #f107a3, #7b2ff7);
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  border: none;
+  border-radius: 25px;
+  padding: 10px 25px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+  transform: scale(1.05);
+}
+
+/* Animación */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>
+
+<div class="edit-container">
+  <h2>✏️ Editar Médico</h2>
+
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    
+    <div class="d-flex justify-content-between mt-4">
+      <button type="submit" class="btn btn-primary px-4">Guardar Cambios</button>
+      <a href="{% url 'medicos' %}" class="btn btn-secondary px-4">Cancelar</a>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

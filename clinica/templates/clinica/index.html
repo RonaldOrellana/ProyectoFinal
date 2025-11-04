@@ -1,0 +1,229 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+/* 🌈 Fondo animado solo para login */
+.index-bg {
+    background: linear-gradient(-45deg, #6a11cb, #2575fc, #6a11cb, #2575fc);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+@keyframes gradientBG {
+    0% {background-position:0% 50%;}
+    50% {background-position:100% 50%;}
+    100% {background-position:0% 50%;}
+}
+
+/* 🔒 Contenedor de login/registro */
+.auth-container {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    max-width: 1000px;
+    width: 100%;
+}
+
+/* 🎯 Estilos del index autenticado */
+body {
+    background-color: #f5f7fa;
+}
+.hero-section {
+    background: linear-gradient(90deg, #7b2ff7, #f107a3);
+    color: white;
+    padding: 70px 20px;
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    text-align: center;
+    margin-bottom: 50px;
+}
+.hero-section h1 { font-weight: 700; font-size: 2.8rem; }
+.hero-section p { font-size: 1.2rem; }
+.card {
+    border: none;
+    border-radius: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+.card .icon { font-size: 3rem; color: #00bfa6; }
+.price-tag { font-size: 1.3rem; color: #198754; font-weight: 600; }
+</style>
+
+{% if not user.is_authenticated %}
+<!-- ================== LOGIN / REGISTRO ================== -->
+<div class="index-bg">
+    <div class="auth-container">
+        <ul class="nav nav-tabs mb-3" id="authTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login-tab-pane" type="button" role="tab">Iniciar Sesión</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="register-tab" data-bs-toggle="tab" data-bs-target="#register-tab-pane" type="button" role="tab">Registrarse</button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="authTabsContent">
+            <!-- LOGIN -->
+            <div class="tab-pane fade show active" id="login-tab-pane" role="tabpanel">
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="login" value="1">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Usuario</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    {% if login_error %}
+                        <div class="alert alert-danger">{{ login_error }}</div>
+                    {% endif %}
+                    <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
+                </form>
+            </div>
+
+            <!-- REGISTRO -->
+            <div class="tab-pane fade" id="register-tab-pane" role="tabpanel">
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="register" value="1">
+                    {{ register_form.as_p }}
+                    {% if register_error %}
+                        <div class="alert alert-danger">{{ register_error }}</div>
+                    {% endif %}
+                    <button type="submit" class="btn btn-success w-100">Crear Cuenta</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<!-- ================== INICIO AUTENTICADO ================== -->
+<section class="hero-section text-center mb-5">
+    <div class="container">
+        <h1>Bienvenido a la <span class="text-warning">Clínica Moderna Chalatenango</span></h1>
+        <p class="mt-3 mb-4">Donde la <strong>salud</strong> y la <strong>innovación</strong> se unen para ofrecerte el mejor cuidado médico.</p>
+        <a href="{% url 'citas' %}" class="btn btn-light btn-lg me-2">
+            <i class="bi bi-calendar-check-fill"></i> Reservar Cita
+        </a>
+    </div>
+</section>
+
+<!-- 🩺 ESPECIALIDADES DESTACADAS -->
+<div class="container mt-5">
+    <h3 class="fw-bold text-primary mb-4">Especialidades destacadas</h3>
+    <div class="row g-4">
+
+        <!-- Odontología -->
+        <div class="col-md-4">
+            <div class="card p-4 h-100">
+                <div class="icon mb-3 text-danger"><i class="bi bi-journal-medical"></i></div>
+                <h5 class="fw-bold">Odontología</h5>
+                <p class="text-muted">Atención dental general, estética y salud oral.</p>
+                <div class="price-tag">Desde $15.00</div>
+                <div class="mt-3">
+                    <a href="{% url 'registrar_cita' %}?servicio=Odontologia" class="btn btn-outline-primary btn-sm"><i class="bi bi-calendar-plus"></i> Reservar</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Psicología -->
+        <div class="col-md-4">
+            <div class="card p-4 h-100">
+                <div class="icon mb-3 text-info"><i class="bi bi-people"></i></div>
+                <h5 class="fw-bold">Psicología</h5>
+                <p class="text-muted">Consultas psicológicas individuales y terapia breve.</p>
+                <div class="price-tag">Desde $15.00</div>
+                <div class="mt-3">
+                    <a href="{% url 'registrar_cita' %}?servicio=Psicologia" class="btn btn-outline-primary btn-sm"><i class="bi bi-calendar-plus"></i> Reservar</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Médico General -->
+        <div class="col-md-4">
+            <div class="card p-4 h-100">
+                <div class="icon mb-3 text-success"><i class="bi bi-person-badge"></i></div>
+                <h5 class="fw-bold">Médico General</h5>
+                <p class="text-muted">Consultas generales, control de enfermedades crónicas y orientación preventiva.</p>
+                <div class="price-tag">Desde $10.00</div>
+                <div class="mt-3">
+                    <a href="{% url 'registrar_cita' %}?servicio=Medico+General" class="btn btn-outline-primary btn-sm"><i class="bi bi-calendar-plus"></i> Reservar</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pediatría -->
+        <div class="col-md-4">
+            <div class="card p-4 h-100">
+                <div class="icon mb-3 text-warning"><i class="bi bi-emoji-smile"></i></div>
+                <h5 class="fw-bold">Pediatría</h5>
+                <p class="text-muted">Atención integral para niños y adolescentes.</p>
+                <div class="price-tag">Desde $20.00</div>
+                <div class="mt-3">
+                    <a href="{% url 'registrar_cita' %}?servicio=Pediatria" class="btn btn-outline-primary btn-sm"><i class="bi bi-calendar-plus"></i> Reservar</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ginecología -->
+        <div class="col-md-4">
+            <div class="card p-4 h-100">
+                <div class="icon mb-3 text-pink"><i class="bi bi-gender-female"></i></div>
+                <h5 class="fw-bold">Ginecología</h5>
+                <p class="text-muted">Controles ginecológicos, planificación familiar y seguimiento prenatal.</p>
+                <div class="price-tag">Desde $15.00</div>
+                <div class="mt-3">
+                    <a href="{% url 'registrar_cita' %}?servicio=Ginecologia" class="btn btn-outline-primary btn-sm"><i class="bi bi-calendar-plus"></i> Reservar</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cardiología -->
+        <div class="col-md-4">
+            <div class="card p-4 h-100">
+                <div class="icon mb-3 text-danger"><i class="bi bi-heart"></i></div>
+                <h5 class="fw-bold">Cardiología</h5>
+                <p class="text-muted">Estudios cardiovasculares y manejo de enfermedades del corazón.</p>
+                <div class="price-tag">Desde $20.00</div>
+                <div class="mt-3">
+                    <a href="{% url 'registrar_cita' %}?servicio=Cardiologia" class="btn btn-outline-primary btn-sm"><i class="bi bi-calendar-plus"></i> Reservar</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cardiología Preventiva -->
+        <div class="col-md-4">
+            <div class="card p-4 h-100">
+                <div class="icon mb-3 text-danger"><i class="bi bi-heart-pulse"></i></div>
+                <h5 class="fw-bold">Cardiología Preventiva</h5>
+                <p class="text-muted">Evaluación de riesgo cardiovascular y prevención.</p>
+                <div class="price-tag">Desde $20.00</div>
+                <div class="mt-3">
+                    <a href="{% url 'registrar_cita' %}?servicio=Cardiologia+Preventiva" class="btn btn-outline-primary btn-sm"><i class="bi bi-calendar-plus"></i> Reservar</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- 🌿 SECCIÓN FINAL -->
+<section class="mt-5 py-5 bg-light rounded-4 text-center">
+    <h3 class="fw-semibold text-primary">Confía en nuestros especialistas</h3>
+    <p class="text-muted mb-4">Tu salud es nuestra prioridad, agenda tu cita hoy.</p>
+    <a href="{% url 'citas' %}" class="btn btn-success btn-lg px-5">
+        <i class="bi bi-telephone-fill"></i> Agenda tu consulta
+    </a>
+</section>
+{% endif %}
+{% endblock %}

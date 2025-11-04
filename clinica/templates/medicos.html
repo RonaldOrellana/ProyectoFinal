@@ -2,111 +2,122 @@
 {% block content %}
 
 <style>
-/* 🌈 Fondo general */
+/* --- Fondo general blanco --- */
 body {
-  background: #f3f7fa;
-  font-family: 'Poppins', sans-serif;
+    background-color: #fff;
+    font-family: 'Poppins', sans-serif;
+    color: #333;
 }
 
-/* 💙 Encabezado */
+/* --- Encabezado --- */
 .header-section {
-  background: linear-gradient(135deg, #2196f3, #1976d2);
-  color: white;
-  border-radius: 25px;
-  padding: 60px 20px;
-  text-align: center;
-  margin-bottom: 50px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    background-color: #f8f9fa;
+    color: #333;
+    border-radius: 25px;
+    padding: 40px 20px;
+    text-align: center;
+    margin-bottom: 40px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
 }
 
 .header-section h1 {
-  font-size: 2.8rem;
-  font-weight: 700;
+    font-size: 2.5rem;
+    font-weight: 700;
 }
 
 .header-section p {
-  font-size: 1.2rem;
-  opacity: 0.9;
+    font-size: 1.1rem;
+    opacity: 0.8;
 }
 
-/* 🩺 Tarjetas de médicos */
+/* --- Tarjetas de médicos --- */
 .card-doctor {
-  background: white;
-  border: none;
-  border-radius: 20px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
-  height: 100%;
-  transition: all 0.3s ease;
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    overflow: hidden;
+    height: 100%;
+    transition: all 0.3s ease;
 }
 
 .card-doctor:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
 }
 
-/* 👨‍⚕️ Imagen del doctor */
+/* --- Imagen del médico --- */
 .card-doctor img {
-  width: 100%;
-  height: 220px;
-  object-fit: cover;
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
 }
 
-/* 🩵 Cuerpo de la tarjeta */
+/* --- Cuerpo de la tarjeta --- */
 .card-body {
-  padding: 1.5rem;
+    padding: 1.5rem;
 }
 
 .doctor-name {
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: #0d47a1;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
 }
 
 .specialty {
-  color: #1565c0;
-  font-weight: 500;
-  font-size: 1rem;
+    color: #555;
+    font-weight: 500;
+    font-size: 1rem;
 }
 
-/* 💬 Botones */
+/* --- Botones --- */
 .btn-modern {
-  border-radius: 25px;
-  font-weight: 600;
-  transition: all 0.3s ease;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
 }
 
 .btn-modern:hover {
-  transform: scale(1.05);
+    transform: scale(1.05);
 }
 
-/* 🧠 Etiquetas */
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+/* --- Badges --- */
 .badge-exp {
-  background: #1976d2;
-  color: white;
-  font-size: 0.85rem;
-  border-radius: 10px;
-  padding: 4px 10px;
+    background: #6c757d;
+    color: #fff;
+    font-size: 0.85rem;
+    border-radius: 10px;
+    padding: 4px 10px;
 }
 
-/* 🧱 Grid uniforme */
+/* --- Grid uniforme --- */
 .card-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 25px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 25px;
 }
 
-/* ✨ Animación */
+/* --- Animación --- */
 .fade-in {
-  animation: fadeIn 0.6s ease-in-out;
+    animation: fadeIn 0.5s ease-in-out;
 }
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 </style>
 
-<!-- 🩺 Encabezado -->
+<!-- Encabezado -->
 <section class="header-section fade-in">
   <h1>👨‍⚕️ Médicos de la Clínica Moderna</h1>
   <p>Conoce a nuestro equipo médico altamente calificado.</p>
@@ -114,7 +125,7 @@ body {
 
 <div class="container mb-5 fade-in">
 
-  <!-- 🔍 Barra superior -->
+  <!-- Barra superior con botón -->
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h4 class="fw-bold text-secondary mb-0">Equipo Médico</h4>
     <a href="{% url 'crear_medico' %}" class="btn btn-primary btn-modern shadow-sm px-4">
@@ -122,7 +133,7 @@ body {
     </a>
   </div>
 
-  <!-- 🧑‍⚕️ Tarjetas -->
+  <!-- Tarjetas de médicos -->
   {% if medicos %}
   <div class="card-container">
     {% for medico in medicos %}
@@ -130,20 +141,25 @@ body {
       {% if medico.foto %}
         <img src="{{ medico.foto.url }}" alt="{{ medico.nombre }}">
       {% else %}
-        <img src="https://cdn-icons-png.flaticon.com/512/387/387561.png" alt="Médico genérico">
+        <img src="https://i.pinimg.com/originals/16/56/9e/16569ed0856efc9fa61922fa04622c68.jpg" alt="Médico genérico">
       {% endif %}
       <div class="card-body">
-        <h5 class="doctor-name mb-1">{{ medico.nombre }}</h5>
+        <h5 class="doctor-name mb-1">{{ medico.nombre }} {{ medico.apellido }}</h5>
         <p class="specialty">{{ medico.especialidad }}</p>
         <p class="text-muted mb-2"><i class="bi bi-envelope"></i> {{ medico.email }}</p>
         <p class="text-muted mb-3"><i class="bi bi-telephone"></i> {{ medico.telefono }}</p>
-
         {% if medico.experiencia %}
         <span class="badge-exp">Experiencia: {{ medico.experiencia }} años</span>
         {% endif %}
       </div>
 
+      <!-- Botones de acción -->
       <div class="p-3 border-top d-flex justify-content-between">
+        <a href="{% url 'editar_medico' medico.id %}" 
+           class="btn btn-outline-primary btn-modern btn-sm px-3">
+          <i class="bi bi-pencil-square"></i> Editar
+        </a>
+
         <a href="{% url 'eliminar_medico' medico.id %}" 
           onclick="return confirm('¿Estás seguro de que deseas eliminar al Dr. {{ medico.nombre }} {{ medico.apellido }}?');"
           class="btn btn-outline-danger btn-modern btn-sm px-3">
@@ -158,6 +174,7 @@ body {
     <i class="bi bi-info-circle"></i> No hay médicos registrados aún.
   </div>
   {% endif %}
+
 </div>
 
 {% endblock %}

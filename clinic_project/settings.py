@@ -84,6 +84,20 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    BASE_DIR / 'clinica' / 'static',  # Ruta donde están tus carpetas css, js, etc.
+]
+
+
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'clinica' / 'static']
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Después de iniciar sesión, redirige al index
+LOGIN_REDIRECT_URL = 'index'
+
+# Después de cerrar sesión, también redirige al index
+LOGOUT_REDIRECT_URL = 'index'
+
+# Asegúrate de tener también esto configurado:
+LOGIN_URL = 'login'

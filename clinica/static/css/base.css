@@ -1,0 +1,150 @@
+:root {
+    --primary-bg: #1f293a;
+    --accent-color: #0cf;
+    --light-text: #f8f9fa;
+    --dark-text: #212529;
+}
+
+body {
+    background-color: var(--primary-bg);
+    color: var(--light-text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+    padding: 2rem 0;
+}
+
+.navbar-custom {
+    background-color: rgba(31, 41, 58, 0.95) !important;
+    border-bottom: 2px solid var(--accent-color);
+    box-shadow: 0 2px 10px rgba(0, 204, 255, 0.2);
+}
+
+.navbar-brand-custom {
+    color: var(--accent-color) !important;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.nav-link-custom {
+    color: var(--light-text) !important;
+    transition: all 0.3s ease;
+    position: relative;
+    margin: 0 5px;
+    border-radius: 4px;
+}
+
+.nav-link-custom:hover,
+.nav-link-custom.active {
+    color: var(--accent-color) !important;
+    background-color: rgba(0, 204, 255, 0.1);
+}
+
+.nav-link-custom::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 50%;
+    background-color: var(--accent-color);
+    transition: all 0.3s ease;
+}
+
+.nav-link-custom:hover::after,
+.nav-link-custom.active::after {
+    width: 100%;
+    left: 0;
+}
+
+.card-custom {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(0, 204, 255, 0.2);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    color: var(--light-text);
+}
+
+.card-custom:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 204, 255, 0.2);
+}
+
+.btn-custom {
+    background-color: var(--accent-color);
+    color: var(--dark-text);
+    border: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-custom:hover {
+    background-color: #09b;
+    color: var(--light-text);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 204, 255, 0.3);
+}
+
+.table-custom {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    overflow: hidden;
+    color: var(--light-text);
+}
+
+.table-custom thead {
+    background-color: rgba(0, 204, 255, 0.2);
+}
+
+.table-custom th {
+    color: var(--accent-color);
+    border-bottom: 1px solid var(--accent-color);
+}
+
+.table-custom td {
+    border-color: rgba(0, 204, 255, 0.1);
+}
+
+.table-custom tbody tr:hover {
+    background-color: rgba(0, 204, 255, 0.1);
+}
+
+.footer-custom {
+    background-color: rgba(31, 41, 58, 0.95);
+    border-top: 1px solid var(--accent-color);
+    color: var(--light-text);
+    padding: 1.5rem 0;
+    margin-top: auto;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    color: var(--accent-color);
+}
+
+.text-accent {
+    color: var(--accent-color) !important;
+}
+
+.bg-accent {
+    background-color: var(--accent-color) !important;
+}
+
+.border-accent {
+    border-color: var(--accent-color) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .navbar-nav {
+        text-align: center;
+    }
+
+    .nav-link-custom {
+        margin: 5px 0;
+    }
+}

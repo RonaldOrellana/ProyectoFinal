@@ -2,18 +2,19 @@
 {% block content %}
 <style>
 body {
-  background: #f3f7fa;
+  background: #fff;
   font-family: 'Poppins', sans-serif;
 }
 
-/* Encabezado: usar la clase global header-section para heredar el tema morado */
+/* Encabezado */
 .header-section {
-  color: white;
+  background: #db5fdbba; /* Fondo blanco */
+  color: #333; /* Texto oscuro */
   border-radius: 25px;
   padding: 60px 20px;
   text-align: center;
   margin-bottom: 50px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
 }
 
 .header-section h1 {
@@ -23,43 +24,45 @@ body {
 
 .header-section p {
   font-size: 1.2rem;
-  opacity: 0.95;
+  opacity: 0.9;
 }
 
-/* 📬 Tarjeta de contacto */
+/* Tarjeta de contacto */
 .contact-card {
-  background: white;
-  border: none;
+  background: #fff; /* Fondo blanco */
+  border: 1px solid #dee2e6;
   border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
   padding: 40px;
   transition: all 0.3s ease;
 }
 
 .contact-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
 }
 
-/* 💬 Formulario */
+/* Formulario */
 .form-control, textarea {
   border-radius: 15px;
-  border: 1px solid #cfd8dc;
+  border: 1px solid #ced4da;
+  background-color: #fff;
+  color: #333;
   transition: all 0.3s ease;
 }
 
 .form-control:focus, textarea:focus {
   border-color: #007bff;
-  box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.2);
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.15);
 }
 
-/* ✉️ Iconos */
+/* Iconos de contacto */
 .contact-info i {
   font-size: 1.5rem;
   color: #007bff;
 }
 
-/* 🧠 Botón moderno */
+/* Botón moderno */
 .btn-modern {
   border-radius: 25px;
   font-weight: 600;
@@ -74,25 +77,27 @@ body {
 .fade-in {
   animation: fadeIn 0.6s ease-in-out;
 }
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 </style>
 
-<!-- 🌐 Encabezado -->
+<!-- Encabezado -->
 <section class="header-section fade-in">
   <h1>📞 Contáctanos</h1>
   <p>Estamos aquí para ayudarte. Escríbenos o visítanos en la clínica.</p>
 </section>
 
-<!-- 💬 Contenido principal -->
+<!-- Contenido principal -->
 <div class="container mb-5 fade-in">
   <div class="row g-4 align-items-stretch">
-    <!-- 📇 Información -->
+
+    <!-- Información -->
     <div class="col-md-5">
       <div class="contact-card h-100">
-        <h4 class="text-primary mb-4 fw-bold">Información de Contacto</h4>
+        <h4 class="text-dark mb-4 fw-bold">Información de Contacto</h4>
         <div class="contact-info mb-3 d-flex align-items-center">
           <i class="bi bi-telephone-fill me-3"></i>
           <span><strong>Teléfono:</strong> +503 7006-5644</span>
@@ -112,10 +117,10 @@ body {
       </div>
     </div>
 
-    <!-- 📝 Formulario -->
+    <!-- Formulario -->
     <div class="col-md-7">
       <div class="contact-card h-100">
-        <h4 class="text-primary fw-bold mb-4">Envíanos un Mensaje</h4>
+        <h4 class="text-dark fw-bold mb-4">Envíanos un Mensaje</h4>
         {% if messages %}
           {% for message in messages %}
             <div class="alert alert-{{ message.tags }}">{{ message }}</div>
@@ -151,6 +156,7 @@ body {
         </form>
       </div>
     </div>
+
   </div>
 </div>
 {% endblock %}

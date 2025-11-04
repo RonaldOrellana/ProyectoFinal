@@ -1,5 +1,5 @@
 from django import forms
-from .models import Paciente, Cita, Medico
+from .models import Paciente, Cita, Medico, Servicio  # <-- Agregado Servicio
 from .models import ContactMessage
 
 class MedicoForm(forms.ModelForm):
@@ -56,7 +56,7 @@ class CitaForm(forms.ModelForm):
             'medico': forms.Select(attrs={'class': 'form-select'}),
             'servicio': forms.Select(attrs={'class': 'form-select'}),
             'fecha': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
-            'motivo': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Motivo de la cita'})
+            'motivo': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Motivo de la cita'}),
         }
 
 
