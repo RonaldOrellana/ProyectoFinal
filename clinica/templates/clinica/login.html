@@ -16,14 +16,14 @@ html, body {
     overflow: hidden;
 }
 
-/* 🔹 Fondo celeste animado */
+/* 🔹 Fondo moradito arcoíris animado */
 .login-bg {
     position: relative;
     width: 100vw;
     height: 100vh;
-    background: linear-gradient(-45deg, #00c6ff, #0072ff, #00c6ff, #0072ff);
+    background: linear-gradient(-45deg, #6a00f4, #b30089, #7a00ff, #a100f2);
     background-size: 400% 400%;
-    animation: gradientBG 15s ease infinite;
+    animation: gradientBG 20s ease infinite;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -53,63 +53,85 @@ html, body {
 
 /* 🔹 Caja del login centrada */
 .login-container {
-    background: rgba(255, 255, 255, 0.92);
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
     padding: 50px;
-    border-radius: 20px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    border-radius: 25px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
     max-width: 400px;
     width: 100%;
     text-align: center;
     z-index: 2;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
-
 .login-container h2 {
     font-weight: bold;
-    color: #0072ff;
+    color: #6a00f4;
     margin-bottom: 25px;
+    font-family: 'Poppins', sans-serif; /* letra bonita */
 }
 
 .login-container input {
     border-radius: 10px;
     padding: 10px;
+    background: rgba(255,255,255,0.2); /* transparente */
+    border: 1px solid rgba(255,255,255,0.5);
+    color: #fff;
+    backdrop-filter: blur(5px);
+}
+
+.login-container input::placeholder {
+    color: rgba(255,255,255,0.8);
 }
 
 .login-container .btn {
     border-radius: 10px;
     padding: 10px;
     font-weight: 600;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+.login-container .btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
 }
 
 .switch-link {
     margin-top: 15px;
     display: block;
-    color: #0072ff;
+    color: #fff;
     font-weight: 600;
     cursor: pointer;
 }
 </style>
 
 <div class="login-bg">
-    <!-- 🌟 Íconos flotantes -->
+    <!-- 🌟 Muchos iconos flotantes -->
     <img src="https://cdn-icons-png.flaticon.com/512/3774/3774299.png" class="icon" style="left:5%; animation-delay:0s;">
-    <img src="https://cdn-icons-png.flaticon.com/512/2966/2966484.png" class="icon" style="left:25%; animation-delay:3s;">
-    <img src="https://cdn-icons-png.flaticon.com/512/2966/2966485.png" class="icon" style="left:45%; animation-delay:6s;">
-    <img src="https://cdn-icons-png.flaticon.com/512/2966/2966487.png" class="icon" style="left:65%; animation-delay:9s;">
-    <img src="https://cdn-icons-png.flaticon.com/512/2966/2966488.png" class="icon" style="left:85%; animation-delay:12s;">
+    <img src="https://cdn-icons-png.flaticon.com/512/2966/2966484.png" class="icon" style="left:15%; animation-delay:2s;">
+    <img src="https://cdn-icons-png.flaticon.com/512/2966/2966485.png" class="icon" style="left:25%; animation-delay:4s;">
+    <img src="https://cdn-icons-png.flaticon.com/512/2966/2966487.png" class="icon" style="left:35%; animation-delay:6s;">
+    <img src="https://cdn-icons-png.flaticon.com/512/2966/2966488.png" class="icon" style="left:45%; animation-delay:8s;">
+    <img src="https://cdn-icons-png.flaticon.com/512/2966/2966490.png" class="icon" style="left:55%; animation-delay:10s;">
+    <img src="https://cdn-icons-png.flaticon.com/512/2966/2966492.png" class="icon" style="left:65%; animation-delay:12s;">
+    <img src="https://cdn-icons-png.flaticon.com/512/2966/2966494.png" class="icon" style="left:75%; animation-delay:14s;">
+    <img src="https://cdn-icons-png.flaticon.com/512/2966/2966496.png" class="icon" style="left:85%; animation-delay:16s;">
 
     <!-- 🩺 Caja de Login -->
     <div class="login-container">
-        <h2>👩‍⚕️ Iniciar Sesión</h2>
+       <h2>👩‍⚕️ Iniciar Sesión</h2>
         <form method="POST" action="{% url 'login' %}">
             {% csrf_token %}
             <div class="mb-3">
-                <input type="text" name="username" class="form-control" placeholder="Usuario" required>
-            </div>
+            <input type="text" name="username" placeholder="Usuario" required>
+            </div> 
             <div class="mb-3">
-                <input type="password" name="password" class="form-control" placeholder="Contraseña" required>
+            <input type="password" name="password" placeholder="Contraseña" required>
             </div>
+            <div class="mb-3"></div> 
             <button type="submit" name="login" class="btn btn-primary w-100">Ingresar</button>
         </form>
+ 
 
         <span class="switch-link" onclick="toggleRegister()">¿No tienes cuenta? Regístrate aquí</span>
     </div>
@@ -117,28 +139,30 @@ html, body {
 
 <!-- 🔹 Modal de registro -->
 <div id="registerModal" class="login-bg" style="display:none;">
-    <img src="https://cdn-icons-png.flaticon.com/512/3774/3774299.png" class="icon" style="left:15%; animation-delay:2s;">
-    <img src="https://cdn-icons-png.flaticon.com/512/2966/2966484.png" class="icon" style="left:75%; animation-delay:5s;">
+    <!-- Iconos flotantes extra para registro -->
+    <img src="https://cdn-icons-png.flaticon.com/512/3774/3774299.png" class="icon" style="left:10%; animation-delay:1s;">
+    <img src="https://cdn-icons-png.flaticon.com/512/2966/2966484.png" class="icon" style="left:80%; animation-delay:3s;">
 
     <div class="login-container">
-        <h2>🩺 Crear Cuenta</h2>
-        <form method="POST" action="{% url 'register' %}">   <!-- ✅ ahora apunta a la vista correcta -->
-
+   <h2>🩺 Crear Cuenta</h2>
+        <form method="POST" action="{% url 'register' %}">
             {% csrf_token %}
             <div class="mb-3">
-                <input type="text" name="username" class="form-control" placeholder="Usuario" required>
+            <input type="text" name="username" placeholder="Usuario" required>
             </div>
             <div class="mb-3">
-                <input type="email" name="email" class="form-control" placeholder="Correo electrónico" required>
+            <input type="email" name="email" placeholder="Correo electrónico" required>
             </div>
             <div class="mb-3">
-                <input type="password" name="password1" class="form-control" placeholder="Contraseña" required>
+            <input type="password" name="password1" placeholder="Contraseña" required>
             </div>
             <div class="mb-3">
-                <input type="password" name="password2" class="form-control" placeholder="Confirmar contraseña" required>
+            <input type="password" name="password2" placeholder="Confirmar contraseña" required>
             </div>
             <button type="submit" class="btn btn-success w-100">Registrarme</button>
-        </form>
+            
+            </form>
+
 
         <span class="switch-link" onclick="toggleLogin()">¿Ya tienes cuenta? Inicia sesión</span>
     </div>

@@ -486,4 +486,4 @@ def register_view(request):
         messages.success(request, 'Usuario creado correctamente. Ahora puedes iniciar sesión.')
         return redirect('login')
 
-    return render(request, 'registrar.html')
+    return render(request, 'registro.html')

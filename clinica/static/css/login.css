@@ -13,7 +13,7 @@ body {
     align-items: center;
     height: 100vh;
     overflow: hidden;
-    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    background: linear-gradient(135deg, #2fa8ca, #432b9b);
     background-size: 200% 200%;
     animation: fondoCeleste 10s ease infinite alternate;
     position: relative;
