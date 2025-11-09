@@ -62,6 +62,68 @@
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
+
+        /* ------------------------------
+    ✅ OPTIMIZACIÓN PARA TELÉFONOS
+   ------------------------------ */
+@media (max-width: 576px) {
+
+    /* Navbar más compacta */
+    .navbar {
+        padding: 0.6rem;
+        font-size: 0.9rem;
+    }
+
+    .navbar-brand {
+        font-size: 1.2rem;
+        text-align: center;
+        width: 100%;
+    }
+
+    /* Centrar elementos */
+    #navbarContent {
+        text-align: center;
+    }
+
+    .nav-link {
+        padding: 0.7rem 0.9rem;
+        font-size: 1rem;
+    }
+
+    /* Botón de login pequeño */
+    .btn-sm {
+        width: 100%;
+        margin-top: 0.7rem;
+    }
+
+    /* Contenedor principal más ajustado */
+    main.container {
+        margin-top: 1.5rem !important;
+        padding: 0 0.8rem;
+    }
+
+    /* Footer más compacto */
+    footer {
+        font-size: 0.85rem;
+        padding: 1rem 0.5rem;
+    }
+
+    /* Login responsive */
+    body.login-page {
+        padding: 1rem;
+        height: auto;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+    }
+
+    .login-card {
+        width: 100% !important;
+        max-width: 350px !important;
+        padding: 1.3rem !important;
+    }
+}
+
     </style>
 </head>
 
