@@ -48,16 +48,26 @@ class PacienteForm(forms.ModelForm):
         fields = ['nombre', 'apellido', 'dui', 'telefono', 'direccion', 'edad', 'medico']
 
 class CitaForm(forms.ModelForm):
+    servicio = forms.ModelChoiceField(
+        queryset=Servicio.objects.all(),
+        required=False,     # ✅ IMPORTANTE
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+
+    medico = forms.ModelChoiceField(
+        queryset=Medico.objects.all(),
+        required=False,     # ✅ IMPORTANTE
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+
     class Meta:
         model = Cita
-        fields = ['paciente', 'medico', 'servicio', 'fecha', 'motivo']
+        fields = ['servicio', 'medico', 'fecha', 'motivo']
         widgets = {
-            'paciente': forms.Select(attrs={'class': 'form-select'}),
-            'medico': forms.Select(attrs={'class': 'form-select'}),
-            'servicio': forms.Select(attrs={'class': 'form-select'}),
             'fecha': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
-            'motivo': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Motivo de la cita'}),
+            'motivo': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
         }
+
 
 
 class ContactForm(forms.ModelForm):
@@ -70,3 +80,4 @@ class ContactForm(forms.ModelForm):
             'asunto': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Asunto (opcional)'}),
             'mensaje': forms.Textarea(attrs={'class': 'form-control', 'rows': 5, 'placeholder': 'Escribe tu mensaje...'})
         }
+

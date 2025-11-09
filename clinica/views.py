@@ -12,27 +12,21 @@ from datetime import datetime
 # -----------------------------
 # VISTAS PRINCIPALES
 # -----------------------------
-from .models import Cita, Servicio
-from django.db.models import Sum
-from django.utils import timezone
-
 def index(request):
+    from django.db.models import Sum
+    from django.utils import timezone
     citas = Cita.objects.all()
-    servicios = Servicio.objects.all()  # <-- Traemos todos los servicios
-
     total_citas = citas.count()
     total_citas_proximas = citas.filter(fecha__gt=timezone.now()).count()
     total_citas_hoy = citas.filter(fecha__date=timezone.now().date()).count()
     total_citas_realizadas = citas.filter(fecha__lt=timezone.now()).count()
     total_costos = citas.aggregate(total=Sum('servicio__precio'))['total'] or 0
-
     return render(request, 'index.html', {
         'total_citas': total_citas,
         'total_citas_proximas': total_citas_proximas,
         'total_citas_hoy': total_citas_hoy,
         'total_citas_realizadas': total_citas_realizadas,
-        'total_costos': total_costos,
-        'servicios': servicios  # <-- enviamos servicios a la plantilla
+        'total_costos': total_costos
     })
 
 def pacientes(request):
@@ -492,4 +486,59 @@ def register_view(request):
         messages.success(request, 'Usuario creado correctamente. Ahora puedes iniciar sesión.')
         return redirect('login')
 
-    return render(request, 'registro.html')
+    return render(request, 'registrar.html')
+
+from .models import Servicio
+
+
+from django.contrib.auth.decorators import login_required
+from .models import Servicio
+
+@login_required(login_url='login')
+def index(request):
+    servicios = Servicio.objects.all()  # ✅ Traemos solo servicios
+
+    return render(request, 'clinica/index.html', {
+        'servicios': servicios
+    })
+
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Servicio
+from .forms import PacienteForm, CitaForm
+from django.contrib import messages
+
+def registrar_cita(request):
+    servicios_destacados = Servicio.objects.all()
+    servicios_otros = Servicio.objects.all()
+
+    if request.method == "POST":
+        paciente_form = PacienteForm(request.POST)
+        cita_form = CitaForm(request.POST)
+
+        # ✅ Mostrar errores en pantalla
+        if not paciente_form.is_valid() or not cita_form.is_valid():
+            messages.error(request, "❌ Hay errores en el formulario. Revisa los campos.")
+            print("ERRORES PACIENTE:", paciente_form.errors)
+            print("ERRORES CITA:", cita_form.errors)
+
+        if paciente_form.is_valid() and cita_form.is_valid():
+            paciente = paciente_form.save()
+
+            cita = cita_form.save(commit=False)
+            cita.paciente = paciente
+            cita.save()
+
+            messages.success(request, "✅ Cita registrada correctamente.")
+            return redirect('citas')
+
+    else:
+        paciente_form = PacienteForm()
+        cita_form = CitaForm()
+
+    return render(request, "clinica/registrar_cita.html", {
+        "paciente_form": paciente_form,
+        "cita_form": cita_form,
+        "servicios_destacados": servicios_destacados,
+        "servicios_otros": servicios_otros,
+        "selected_servicio": None
+    })

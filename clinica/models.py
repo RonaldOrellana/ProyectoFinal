@@ -28,24 +28,30 @@ class Medico(models.Model):
 
 # Modelo Servicio
 class Servicio(models.Model):
-    medico = models.ForeignKey(Medico, on_delete=models.CASCADE, related_name="servicios")
+    medico = models.ForeignKey(
+        Medico,
+        on_delete=models.CASCADE,
+        null=True,      # ✅ PERMITE VALORES NULOS
+        blank=True      # ✅ NO ES OBLIGATORIO EN FORMULARIOS
+    )
     nombre = models.CharField(max_length=100)
     descripcion = models.TextField(blank=True)
     precio = models.DecimalField(max_digits=8, decimal_places=2)
 
     def __str__(self):
-        return f"{self.nombre} ({self.medico.nombre} {self.medico.apellido})"
+        return self.nombre 
+
 
 # Modelo Cita
 class Cita(models.Model):
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='citas')
-    medico = models.ForeignKey(Medico, on_delete=models.CASCADE, related_name='citas')
+    medico = models.ForeignKey(Medico, on_delete=models.SET_NULL, null=True, blank=True, related_name='citas')
     servicio = models.ForeignKey(Servicio, on_delete=models.SET_NULL, null=True, blank=True, related_name='citas')
     fecha = models.DateTimeField()
     motivo = models.TextField(blank=True)
 
     def __str__(self):
-        return f"Cita: {self.paciente} con {self.medico} el {self.fecha}"
+        return f"Cita: {self.paciente} con {self.medico if self.medico else 'Sin médico'} el {self.fecha}"
 
 
 # Mensajes de contacto enviados desde la web
@@ -77,3 +83,24 @@ class CitaForm(forms.ModelForm):
         # Mostrar el nombre de la especialidad en lugar del nombre del médico
         self.fields['medico'].label_from_instance = lambda obj: obj.especialidad
 
+from django import forms
+from .models import Cita, Medico, Servicio
+
+class CitaForm(forms.ModelForm):
+    class Meta:
+        model = Cita
+        fields = ['paciente', 'servicio', 'medico', 'fecha', 'motivo']
+        widgets = {
+            'paciente': forms.Select(attrs={'class': 'form-select'}),
+            'servicio': forms.Select(attrs={'class': 'form-select'}),
+            'medico': forms.Select(attrs={'class': 'form-select'}),
+            'fecha': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
+            'motivo': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+        }
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Mostrar solo una especialidad única (sin repetir)
+        especialidades = Medico.objects.values_list('especialidad', flat=True).distinct()
+        self.fields['medico'].queryset = Medico.objects.filter(especialidad__in=especialidades).distinct()
+        # Mostrar el nombre de la especialidad en lugar del nombre del médico
+        self.fields['medico'].label_from_instance = lambda obj: obj.especialidad
