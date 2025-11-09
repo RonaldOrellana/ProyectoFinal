@@ -14,43 +14,9 @@
         {% endfor %}
       {% endif %}
 
-      <!-- SERVICIOS DESTACADOS -->
-      {% if servicios_destacados %}
-      <div class="mb-4">
-        <h5 class="text-primary fw-semibold">⭐ Servicios Destacados</h5>
-        <div class="row g-3">
-          {% for servicio in servicios_destacados %}
-          <div class="col-md-6 col-lg-4">
-            <div class="card shadow-sm border-0 rounded-3 p-2 text-center" style="background: #fff8e1;">
-              <div class="card-body p-2">
-                <h6 class="fw-bold mb-1">{{ servicio.nombre }}</h6>
-                <small class="text-muted">{{ servicio.descripcion|truncatechars:50 }}</small>
-              </div>
-            </div>
-          </div>
-          {% endfor %}
-        </div>
-      </div>
-      {% endif %}
+      <!-- ✅ SE ELIMINÓ: Servicios Destacados -->
 
-      <!-- OTROS SERVICIOS -->
-      {% if servicios_otros %}
-      <div class="mb-4">
-        <h5 class="text-secondary fw-semibold">Servicios</h5>
-        <div class="row g-3">
-          {% for servicio in servicios_otros %}
-          <div class="col-md-6 col-lg-4">
-            <div class="card shadow-sm border-0 rounded-3 p-2 text-center" style="background: #f4f4f4;">
-              <div class="card-body p-2">
-                <h6 class="fw-bold mb-1">{{ servicio.nombre }}</h6>
-                <small class="text-muted">{{ servicio.descripcion|truncatechars:50 }}</small>
-              </div>
-            </div>
-          </div>
-          {% endfor %}
-        </div>
-      </div>
-      {% endif %}
+      <!-- ✅ SE ELIMINÓ: Otros Servicios -->
 
       <form method="post">
         {% csrf_token %}
@@ -83,6 +49,7 @@
           <!-- CITA -->
           <div class="col-md-6">
             <h5 class="text-primary mb-3">📅 Información de la Cita</h5>
+
             {% if selected_servicio %}
             <div class="mb-3">
               <label class="form-label fw-semibold">Servicio solicitado</label>
@@ -136,7 +103,6 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* Hover suave en tarjetas de servicios */
   .card:hover {
     transform: translateY(-3px);
     box-shadow: 0 10px 20px rgba(0,0,0,0.15);
