@@ -12,21 +12,27 @@ from datetime import datetime
 # -----------------------------
 # VISTAS PRINCIPALES
 # -----------------------------
+from .models import Cita, Servicio
+from django.db.models import Sum
+from django.utils import timezone
+
 def index(request):
-    from django.db.models import Sum
-    from django.utils import timezone
     citas = Cita.objects.all()
+    servicios = Servicio.objects.all()  # <-- Traemos todos los servicios
+
     total_citas = citas.count()
     total_citas_proximas = citas.filter(fecha__gt=timezone.now()).count()
     total_citas_hoy = citas.filter(fecha__date=timezone.now().date()).count()
     total_citas_realizadas = citas.filter(fecha__lt=timezone.now()).count()
     total_costos = citas.aggregate(total=Sum('servicio__precio'))['total'] or 0
+
     return render(request, 'index.html', {
         'total_citas': total_citas,
         'total_citas_proximas': total_citas_proximas,
         'total_citas_hoy': total_citas_hoy,
         'total_citas_realizadas': total_citas_realizadas,
-        'total_costos': total_costos
+        'total_costos': total_costos,
+        'servicios': servicios  # <-- enviamos servicios a la plantilla
     })
 
 def pacientes(request):
