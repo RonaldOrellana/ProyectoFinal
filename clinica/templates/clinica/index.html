@@ -56,7 +56,7 @@ body {
 .card .icon { font-size: 3rem; }
 .price-tag { font-size: 1.3rem; font-weight: 600; }
 
-/* 🔹 Colores por servicio */
+/* Colores por servicio (puedes añadir más según tu base de datos) */
 .text-odontologia { color: #dc3545; }
 .text-psicologia { color: #0dcaf0; }
 .text-medico { color: #198754; }
@@ -136,102 +136,27 @@ body {
     </div>
 </section>
 
-<!-- 🩺 ESPECIALIDADES DESTACADAS -->
+<!-- 🩺 ESPECIALIDADES DESTACADAS DINÁMICAS -->
 <div class="container mt-5">
     <h3 class="fw-bold text-primary mb-4">Especialidades destacadas</h3>
     <div class="row g-4">
-
-        <!-- Odontología -->
+        {% for servicio in servicios %}
         <div class="col-12 col-md-4">
             <div class="card p-4 h-100">
-                <div class="icon mb-3 text-odontologia"><i class="bi bi-journal-medical"></i></div>
-                <h5 class="fw-bold">Odontología</h5>
-                <p class="text-muted">Atención dental general, estética y salud oral.</p>
-                <div class="price-tag">Desde $15.00</div>
+                <div class="icon mb-3 {{ servicio.clase_icono }}"><i class="{{ servicio.icono }}"></i></div>
+                <h5 class="fw-bold">{{ servicio.nombre }}</h5>
+                <p class="text-muted">{{ servicio.descripcion }}</p>
+                <div class="price-tag">Desde ${{ servicio.precio }}</div>
                 <div class="mt-3">
-                    <a href="{% url 'registrar_cita' %}?servicio=Odontologia" class="btn btn-outline-primary btn-sm"><i class="bi bi-calendar-plus"></i> Reservar</a>
+                    <a href="{% url 'registrar_cita' %}?servicio={{ servicio.nombre }}" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-calendar-plus"></i> Reservar
+                    </a>
                 </div>
             </div>
         </div>
-
-        <!-- Psicología -->
-        <div class="col-12 col-md-4">
-            <div class="card p-4 h-100">
-                <div class="icon mb-3 text-psicologia"><i class="bi bi-people"></i></div>
-                <h5 class="fw-bold">Psicología</h5>
-                <p class="text-muted">Consultas psicológicas individuales y terapia breve.</p>
-                <div class="price-tag">Desde $15.00</div>
-                <div class="mt-3">
-                    <a href="{% url 'registrar_cita' %}?servicio=Psicologia" class="btn btn-outline-primary btn-sm"><i class="bi bi-calendar-plus"></i> Reservar</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Médico General -->
-        <div class="col-12 col-md-4">
-            <div class="card p-4 h-100">
-                <div class="icon mb-3 text-medico"><i class="bi bi-person-badge"></i></div>
-                <h5 class="fw-bold">Médico General</h5>
-                <p class="text-muted">Consultas generales, control de enfermedades crónicas y orientación preventiva.</p>
-                <div class="price-tag">Desde $10.00</div>
-                <div class="mt-3">
-                    <a href="{% url 'registrar_cita' %}?servicio=Medico+General" class="btn btn-outline-primary btn-sm"><i class="bi bi-calendar-plus"></i> Reservar</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pediatría -->
-        <div class="col-12 col-md-4">
-            <div class="card p-4 h-100">
-                <div class="icon mb-3 text-pediatria"><i class="bi bi-emoji-smile"></i></div>
-                <h5 class="fw-bold">Pediatría</h5>
-                <p class="text-muted">Atención integral para niños y adolescentes.</p>
-                <div class="price-tag">Desde $20.00</div>
-                <div class="mt-3">
-                    <a href="{% url 'registrar_cita' %}?servicio=Pediatria" class="btn btn-outline-primary btn-sm"><i class="bi bi-calendar-plus"></i> Reservar</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Ginecología -->
-        <div class="col-12 col-md-4">
-            <div class="card p-4 h-100">
-                <div class="icon mb-3 text-ginecologia"><i class="bi bi-gender-female"></i></div>
-                <h5 class="fw-bold">Ginecología</h5>
-                <p class="text-muted">Controles ginecológicos, planificación familiar y seguimiento prenatal.</p>
-                <div class="price-tag">Desde $15.00</div>
-                <div class="mt-3">
-                    <a href="{% url 'registrar_cita' %}?servicio=Ginecologia" class="btn btn-outline-primary btn-sm"><i class="bi bi-calendar-plus"></i> Reservar</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Cardiología -->
-        <div class="col-12 col-md-4">
-            <div class="card p-4 h-100">
-                <div class="icon mb-3 text-cardiologia"><i class="bi bi-heart"></i></div>
-                <h5 class="fw-bold">Cardiología</h5>
-                <p class="text-muted">Estudios cardiovasculares y manejo de enfermedades del corazón.</p>
-                <div class="price-tag">Desde $20.00</div>
-                <div class="mt-3">
-                    <a href="{% url 'registrar_cita' %}?servicio=Cardiologia" class="btn btn-outline-primary btn-sm"><i class="bi bi-calendar-plus"></i> Reservar</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Cardiología Preventiva -->
-        <div class="col-12 col-md-4">
-            <div class="card p-4 h-100">
-                <div class="icon mb-3 text-cardiopreventiva"><i class="bi bi-heart-pulse"></i></div>
-                <h5 class="fw-bold">Cardiología Preventiva</h5>
-                <p class="text-muted">Evaluación de riesgo cardiovascular y prevención.</p>
-                <div class="price-tag">Desde $20.00</div>
-                <div class="mt-3">
-                    <a href="{% url 'registrar_cita' %}?servicio=Cardiologia+Preventiva" class="btn btn-outline-primary btn-sm"><i class="bi bi-calendar-plus"></i> Reservar</a>
-                </div>
-            </div>
-        </div>
-
+        {% empty %}
+        <p class="text-muted">No hay servicios disponibles en este momento.</p>
+        {% endfor %}
     </div>
 </div>
 
