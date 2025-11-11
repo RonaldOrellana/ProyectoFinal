@@ -93,6 +93,7 @@ def register_view(request):
 
     return render(request, 'registro.html')
 
+
 # =====================================================
 # ✅ PACIENTES
 # =====================================================
