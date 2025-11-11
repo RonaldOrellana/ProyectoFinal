@@ -91,7 +91,7 @@ def register_view(request):
         # ✅ REDIRECCIÓN INMEDIATA AL LOGIN
         return redirect('login')
 
-    return render(request, 'login')
+    return render(request, 'registro.html')
 
 # =====================================================
 # ✅ PACIENTES
