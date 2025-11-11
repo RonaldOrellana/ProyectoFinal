@@ -64,24 +64,34 @@ def cerrar_sesion(request):
 
 def register_view(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        email = request.POST['email']
-        password1 = request.POST['password1']
-        password2 = request.POST['password2']
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
 
+        # Validación de contraseñas
         if password1 != password2:
             messages.error(request, 'Las contraseñas no coinciden')
             return redirect('register')
 
+        # Verificar si el usuario ya existe
         if User.objects.filter(username=username).exists():
             messages.error(request, 'Ese usuario ya existe')
             return redirect('register')
 
-        user = User.objects.create_user(username=username, email=email, password=password1)
-        messages.success(request, 'Usuario creado correctamente.')
+        # Crear el usuario
+        user = User.objects.create_user(
+            username=username, 
+            email=email, 
+            password=password1
+        )
+
+        messages.success(request, 'Usuario creado correctamente. Ahora inicia sesión.')
+        
+        # ✅ REDIRECCIÓN INMEDIATA AL LOGIN
         return redirect('login')
 
-    return render(request, 'registro.html')
+    return render(request, 'login')
 
 # =====================================================
 # ✅ PACIENTES
