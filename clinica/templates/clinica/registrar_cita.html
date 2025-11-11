@@ -14,39 +14,54 @@
         {% endfor %}
       {% endif %}
 
-      <!-- ✅ SE ELIMINÓ: Servicios Destacados -->
-
-      <!-- ✅ SE ELIMINÓ: Otros Servicios -->
-
       <form method="post">
         {% csrf_token %}
         <div class="row g-4">
-          <!-- PACIENTE -->
+
+          <!-- ✅ INFORMACIÓN DEL PACIENTE -->
           <div class="col-md-6">
             <h5 class="text-primary mb-3">👤 Información del Paciente</h5>
+
             <div class="mb-3">
               <label class="form-label fw-semibold">Nombre</label>
               {{ paciente_form.nombre }}
             </div>
+
             <div class="mb-3">
               <label class="form-label fw-semibold">Apellido</label>
               {{ paciente_form.apellido }}
             </div>
+
+            <!-- ✅ EDAD -->
             <div class="mb-3">
+              <label class="form-label fw-semibold">Edad</label>
+              {{ paciente_form.edad }}
+            </div>
+
+            <!-- ✅ DUI NORMAL (SOLO MAYORES) -->
+            <div class="mb-3" id="grupo-dui">
               <label class="form-label fw-semibold">DUI</label>
               {{ paciente_form.dui }}
             </div>
+
+            <!-- ✅ DUI DEL RESPONSABLE (SOLO MENORES) -->
+            <div class="mb-3" id="grupo-dui-responsable" style="display:none;">
+              <label class="form-label fw-semibold">DUI del Responsable (Madre/Padre)</label>
+              <input type="text" name="dui_responsable" class="form-control" placeholder="00000000-0">
+            </div>
+
             <div class="mb-3">
               <label class="form-label fw-semibold">Teléfono</label>
               {{ paciente_form.telefono }}
             </div>
+
             <div class="mb-3">
               <label class="form-label fw-semibold">Dirección</label>
               {{ paciente_form.direccion }}
             </div>
           </div>
 
-          <!-- CITA -->
+          <!-- ✅ INFORMACIÓN DE LA CITA -->
           <div class="col-md-6">
             <h5 class="text-primary mb-3">📅 Información de la Cita</h5>
 
@@ -61,19 +76,23 @@
               <label class="form-label fw-semibold">Servicio</label>
               {{ cita_form.servicio }}
             </div>
+
             <div class="mb-3">
               <label class="form-label fw-semibold">Médico</label>
               {{ cita_form.medico }}
             </div>
+
             <div class="mb-3">
               <label class="form-label fw-semibold">Fecha y Hora</label>
               {{ cita_form.fecha }}
             </div>
+
             <div class="mb-3">
               <label class="form-label fw-semibold">Motivo</label>
               {{ cita_form.motivo }}
             </div>
           </div>
+
         </div>
 
         <div class="text-center mt-4">
@@ -84,6 +103,7 @@
             🔙 Cancelar
           </a>
         </div>
+
       </form>
     </div>
   </div>
@@ -109,5 +129,39 @@
     transition: all 0.3s ease-in-out;
   }
 </style>
+
+<!-- ✅ SCRIPT PARA DETECTAR LA EDAD -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const edadInput = document.querySelector("#id_edad");
+    const duiInput = document.querySelector("#id_dui");
+    const grupoDui = document.getElementById("grupo-dui");
+    const grupoDuiResponsable = document.getElementById("grupo-dui-responsable");
+
+    function validarEdad() {
+        const edad = parseInt(edadInput.value);
+
+        if (!isNaN(edad)) {
+            if (edad < 18) {
+                // ✅ Menor de edad
+                duiInput.value = "";
+                grupoDui.style.display = "none";
+                duiInput.disabled = true;
+
+                grupoDuiResponsable.style.display = "block";
+
+            } else {
+                // ✅ Mayor de edad
+                grupoDui.style.display = "block";
+                duiInput.disabled = false;
+
+                grupoDuiResponsable.style.display = "none";
+            }
+        }
+    }
+
+    edadInput.addEventListener("input", validarEdad);
+});
+</script>
 
 {% endblock %}
