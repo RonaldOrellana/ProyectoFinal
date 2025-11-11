@@ -12,17 +12,13 @@ from django.utils import timezone
 from .models import Paciente, Medico, Cita, Servicio
 from .forms import PacienteForm, MedicoForm, CitaForm, ContactForm
 
-
 # =====================================================
 # ✅ INICIO (RESTRINGIDO — SOLO USUARIOS LOGUEADOS)
 # =====================================================
 @login_required(login_url='login')
 def index(request):
     servicios = Servicio.objects.all()
-    return render(request, 'clinica/index.html', {
-        'servicios': servicios
-    })
-
+    return render(request, 'clinica/index.html', {'servicios': servicios})
 
 # =====================================================
 # ✅ LOGIN / REGISTER / LOGOUT
@@ -62,11 +58,9 @@ def login_view(request):
         'register_form': form
     })
 
-
 def cerrar_sesion(request):
     logout(request)
     return redirect('login')
-
 
 def register_view(request):
     if request.method == 'POST':
@@ -89,22 +83,17 @@ def register_view(request):
 
     return render(request, 'registrar.html')
 
-
 # =====================================================
 # ✅ PACIENTES
 # =====================================================
 @login_required(login_url='login')
 def pacientes(request):
-
     last_cita_qs = Cita.objects.filter(paciente=OuterRef('pk')).order_by('-fecha')
-
     pacientes = Paciente.objects.all().annotate(
         last_medico_nombre=Subquery(last_cita_qs.values('medico__nombre')[:1]),
         last_medico_apellido=Subquery(last_cita_qs.values('medico__apellido')[:1])
     )
-
     return render(request, 'pacientes.html', {'pacientes': pacientes})
-
 
 @login_required(login_url='login')
 def crear_paciente(request):
@@ -117,29 +106,23 @@ def crear_paciente(request):
         messages.error(request, 'Corrige los errores')
     else:
         form = PacienteForm()
-
     return render(request, 'clinica/crear_paciente.html', {'form': form})
 
-
+@login_required(login_url='login')
 def crear_paciente_ajax(request):
     if request.method == 'POST' and request.headers.get('x-requested-with') == 'XMLHttpRequest':
         nombre = request.POST.get('nombre')
         apellido = request.POST.get('apellido')
         dui = request.POST.get('dui')
-
         if Paciente.objects.filter(dui=dui).exists():
             return JsonResponse({'success': False, 'error': 'Este paciente ya existe'})
-
         paciente = Paciente.objects.create(nombre=nombre, apellido=apellido, dui=dui)
-
         return JsonResponse({
             'success': True,
             'id': paciente.id,
             'nombre_completo': f"{paciente.nombre} {paciente.apellido}"
         })
-
     return JsonResponse({'success': False, 'error': 'Método no permitido'})
-
 
 @login_required(login_url='login')
 def editar_paciente(request, paciente_id):
@@ -153,12 +136,7 @@ def editar_paciente(request, paciente_id):
         messages.error(request, "Corrige los errores")
     else:
         form = PacienteForm(instance=paciente)
-
-    return render(request, 'clinica/editar_paciente.html', {
-        'form': form,
-        'paciente': paciente
-    })
-
+    return render(request, 'clinica/editar_paciente.html', {'form': form, 'paciente': paciente})
 
 @login_required(login_url='login')
 def eliminar_paciente(request, paciente_id):
@@ -167,7 +145,6 @@ def eliminar_paciente(request, paciente_id):
     messages.success(request, "Paciente eliminado ✅")
     return redirect('pacientes')
 
-
 # =====================================================
 # ✅ MÉDICOS
 # =====================================================
@@ -175,7 +152,6 @@ def eliminar_paciente(request, paciente_id):
 def medicos(request):
     medicos = Medico.objects.all().order_by('apellido')
     citas = Cita.objects.all()
-
     return render(request, 'medicos.html', {
         'medicos': medicos,
         'total_citas': citas.count(),
@@ -184,7 +160,6 @@ def medicos(request):
         'total_citas_realizadas': citas.filter(fecha__lt=timezone.now()).count(),
         'total_costos': citas.aggregate(total=Sum('servicio__precio'))['total'] or 0
     })
-
 
 @login_required(login_url='login')
 def crear_medico(request):
@@ -197,9 +172,7 @@ def crear_medico(request):
         messages.error(request, "Corrige los errores")
     else:
         form = MedicoForm()
-
     return render(request, 'clinica/crear_medico.html', {'form': form})
-
 
 @login_required(login_url='login')
 def editar_medico(request, medico_id):
@@ -211,9 +184,7 @@ def editar_medico(request, medico_id):
             return redirect('medicos')
     else:
         form = MedicoForm(instance=medico)
-
     return render(request, 'clinica/editar_medico.html', {'form': form, 'medico': medico})
-
 
 @login_required(login_url='login')
 def eliminar_medico(request, medico_id):
@@ -222,7 +193,6 @@ def eliminar_medico(request, medico_id):
     messages.success(request, "Médico eliminado ✅")
     return redirect('medicos')
 
-
 # =====================================================
 # ✅ CITAS
 # =====================================================
@@ -230,7 +200,6 @@ def eliminar_medico(request, medico_id):
 def citas_lista(request):
     citas = Cita.objects.all().order_by('-fecha')
     stats_unlocked = request.session.get('stats_unlocked', False)
-
     return render(request, 'clinica/citas_lista.html', {
         'citas': citas,
         'total_citas': citas.count(),
@@ -241,7 +210,6 @@ def citas_lista(request):
         'stats_unlocked': stats_unlocked
     })
 
-
 @login_required(login_url='login')
 def registrar_cita(request):
     servicios = Servicio.objects.all()
@@ -251,7 +219,6 @@ def registrar_cita(request):
     if request.method == 'POST':
         paciente_form = PacienteForm(request.POST)
         cita_form = CitaForm(request.POST)
-
         if paciente_form.is_valid() and cita_form.is_valid():
             paciente = paciente_form.save()
             cita = cita_form.save(commit=False)
@@ -259,9 +226,7 @@ def registrar_cita(request):
             cita.save()
             messages.success(request, "Cita registrada ✅")
             return redirect('citas')
-
         messages.error(request, "Corrige los errores")
-
     else:
         paciente_form = PacienteForm()
         cita_form = CitaForm()
@@ -274,24 +239,49 @@ def registrar_cita(request):
         'cita_form': cita_form
     })
 
-
 @login_required(login_url='login')
 def ver_cita(request, cita_id):
     cita = get_object_or_404(Cita, id=cita_id)
     return render(request, 'ver_cita.html', {'cita': cita})
 
+@login_required(login_url='login')
+def editar_cita(request, cita_id):
+    cita = get_object_or_404(Cita, id=cita_id)
+    pacientes = Paciente.objects.all()
+    medicos = Medico.objects.all()
+
+    if request.method == 'POST':
+        paciente_id = request.POST.get('paciente')
+        medico_id = request.POST.get('medico')
+        fecha = request.POST.get('fecha')
+        motivo = request.POST.get('motivo')
+        cita.paciente_id = paciente_id
+        cita.medico_id = medico_id
+        cita.fecha = fecha
+        cita.motivo = motivo
+        cita.save()
+        messages.success(request, '✅ Cita actualizada correctamente.')
+        return redirect('citas')
+
+    return render(request, 'clinica/editar_cita.html', {
+        'cita': cita,
+        'pacientes': pacientes,
+        'medicos': medicos,
+    })
 
 @login_required(login_url='login')
 def eliminar_cita(request, cita_id):
     cita = get_object_or_404(Cita, id=cita_id)
-    cita.delete()
-    messages.success(request, "Cita eliminada ✅")
-    return redirect('citas')
-
+    if request.method == 'POST':
+        cita.delete()
+        messages.success(request, '❌ Cita eliminada.')
+        return redirect('citas')
+    return render(request, 'clinica/eliminar_cita.html', {'cita': cita})
 
 # =====================================================
 # ✅ ESTADÍSTICAS (PIN)
 # =====================================================
+@login_required(login_url='login')
 def unlock_stats(request):
     if request.method == 'POST':
         if request.POST.get('pin') == '123':
@@ -301,12 +291,11 @@ def unlock_stats(request):
             messages.error(request, "PIN incorrecto ❌")
     return redirect('citas')
 
-
+@login_required(login_url='login')
 def lock_stats(request):
     request.session.pop('stats_unlocked', None)
     messages.info(request, "Estadísticas ocultadas")
     return redirect('citas')
-
 
 # =====================================================
 # ✅ CONTACTO
@@ -321,42 +310,4 @@ def contacto(request):
         messages.error(request, "Corrige los errores")
     else:
         form = ContactForm()
-
     return render(request, 'contacto.html', {'form': form})
-@login_required(login_url='login')
-def editar_cita(request, cita_id):
-    cita = get_object_or_404(Cita, id=cita_id)
-    pacientes = Paciente.objects.all()
-    medicos = Medico.objects.all()
-
-    if request.method == 'POST':
-        paciente_id = request.POST.get('paciente')
-        medico_id = request.POST.get('medico')
-        fecha = request.POST.get('fecha')
-        motivo = request.POST.get('motivo')
-
-        cita.paciente_id = paciente_id
-        cita.medico_id = medico_id
-        cita.fecha = fecha
-        cita.motivo = motivo
-        cita.save()
-
-        messages.success(request, '✅ Cita actualizada correctamente.')
-        return redirect('citas')
-
-    context = {
-        'cita': cita,
-        'pacientes': pacientes,
-        'medicos': medicos,
-    }
-    return render(request, 'clinica/editar_cita.html', context)
-
-@login_required(login_url='login')
-def eliminar_cita(request, cita_id):
-    cita = get_object_or_404(Cita, id=cita_id)
-    if request.method == 'POST':
-        cita.delete()
-        messages.success(request, '❌ Cita eliminada.')
-        return redirect('citas')
-    return render(request, 'clinica/eliminar_cita.html', {'cita': cita})
-

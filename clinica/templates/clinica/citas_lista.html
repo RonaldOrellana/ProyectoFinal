@@ -163,25 +163,141 @@ body {
     </div>
     {% else %}
     <!-- Formulario para desbloquear estadísticas con PIN -->
-    <div class="row mb-4">
-      <div class="col-md-6">
-        <div class="card shadow-sm border-0 rounded-4 mb-3">
-          <div class="card-body py-4">
-            <h5 class="fw-semibold mb-3">🔒 Estadísticas privadas</h5>
-            <p class="text-muted">Introduce el PIN para ver el resumen completo de citas.</p>
-            <form method="post" action="{% url 'unlock_stats' %}">
-              {% csrf_token %}
-              <div class="input-group mb-3">
-                <input type="password" name="pin" class="form-control" placeholder="PIN" aria-label="PIN">
-                <button class="btn btn-primary" type="submit">Desbloquear</button>
-              </div>
-              <small class="text-muted">Pista: pregunta al administrador.</small>
-            </form>
-          </div>
+   <div class="row mb-4">
+  <div class="col-md-6">
+
+    <div class="card shadow-sm border-0 rounded-4 mb-3">
+      <div class="card-body py-4">
+        <h5 class="fw-semibold mb-3">🔒 Estadísticas privadas</h5>
+        <p class="text-muted">
+          Esta información está protegida. Presiona el botón para ver todas las citas.
+        </p>
+
+        <!-- ✅ BOTÓN PARA PEDIR PIN -->
+        <div class="text-center">
+          <button class="btn btn-primary btn-lg rounded-pill px-4 shadow-sm"
+                  type="button"
+                  onclick="solicitarPIN()">
+            🔐 Ver citas
+          </button>
         </div>
+
       </div>
     </div>
-    {% endif %}
-  </div>
 
+  </div>
+</div>
+
+<!-- ✅ SECCIÓN OCULTA HASTA QUE SE PONGA EL PIN -->
+
+
+<div id="citasSection" style="display: none;">
+  <div class="card shadow-sm border-0 rounded-4">
+    <div class="card-header bg-primary text-white rounded-top-4 py-3">
+      <h4 class="fw-bold mb-0">📋 Historial Completo de Citas</h4>
+    </div>
+
+    <div class="card-body">
+
+      {% if citas %}
+      <div class="table-responsive">
+        <table class="table table-hover align-middle text-center">
+          <thead class="table-primary">
+            <tr>
+              <th>#</th>
+              <th>Paciente</th>
+              <th>Servicio</th>
+              <th>Médico</th>
+              <th>Fecha</th>
+              <th>Motivo</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for cita in citas %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ cita.paciente.nombre }} {{ cita.paciente.apellido }}</td>
+              <td>{{ cita.servicio.nombre }}</td>
+              <td>{{ cita.medico.nombre }}</td>
+              <td>{{ cita.fecha|date:"d/m/Y H:i" }}</td>
+              <td>{{ cita.motivo }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+
+        </table>
+      </div>
+
+      {% else %}
+      <div class="alert alert-info text-center mb-0">
+        No hay citas registradas todavía.
+      </div>
+      {% endif %}
+
+      <!-- ✅ BOTONES PARA CONTROL -->
+      <div class="text-center mt-4">
+        <button onclick="solicitarPIN()" class="btn btn-outline-primary me-2">
+          🔄 Volver a ingresar PIN
+        </button>
+
+        <button onclick="bloquearCitas()" class="btn btn-outline-danger">
+          🔒 Bloquear
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+  #citasSection {
+    animation: fadeIn 0.4s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<!-- ✅ SweetAlert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  function solicitarPIN() {
+    Swal.fire({
+      title: '🔐 PIN requerido',
+      text: 'Ingresa el PIN para mostrar el historial de citas.',
+      input: 'password',
+      inputPlaceholder: 'PIN',
+      confirmButtonText: 'Desbloquear',
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        if (result.value === "123") {  
+          document.getElementById("citasSection").style.display = "block";
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'PIN incorrecto',
+            text: 'No tienes permiso para ver esta información.'
+          });
+        }
+      }
+    });
+  }
+
+  function bloquearCitas() {
+    document.getElementById("citasSection").style.display = "none";
+    Swal.fire({
+      icon: 'info',
+      title: '🔒 Historial bloqueado',
+      text: 'La sección de citas ha sido ocultada nuevamente.'
+    });
+  }
+</script>
+
+{% endif %}
 {% endblock %}
