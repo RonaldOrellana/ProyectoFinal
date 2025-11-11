@@ -13,6 +13,7 @@
                 </div>
 
                 <div class="card-body p-4">
+
                     {% if messages %}
                         {% for message in messages %}
                             <div class="alert alert-{{ message.tags }} text-center fw-semibold">
@@ -29,6 +30,7 @@
                                 <label class="form-label fw-semibold">Nombre</label>
                                 {{ form.nombre|add_class:"form-control form-control-lg shadow-sm" }}
                             </div>
+
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-semibold">Apellido</label>
                                 {{ form.apellido|add_class:"form-control form-control-lg shadow-sm" }}
@@ -40,9 +42,22 @@
                                 <label class="form-label fw-semibold">DUI</label>
                                 {{ form.dui|add_class:"form-control form-control-lg shadow-sm" }}
                             </div>
+
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-semibold">Teléfono</label>
                                 {{ form.telefono|add_class:"form-control form-control-lg shadow-sm" }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold">Edad</label>
+                                {{ form.edad|add_class:"form-control form-control-lg shadow-sm" }}
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold">Médico</label>
+                                {{ form.medico|add_class:"form-control form-control-lg shadow-sm" }}
                             </div>
                         </div>
 
@@ -57,8 +72,16 @@
                                     style="background: linear-gradient(90deg, #33AEFF, #0062E6); border: none;">
                                 💾 Guardar Paciente
                             </button>
+                        <div class="d-grid mt-3">
+                        <a href="{% url 'pacientes' %}" 
+                                    class="btn btn-outline-primary btn-lg fw-bold rounded-pill py-3 shadow-sm"
+                                    style="border: 2px solid #33AEFF;">
+                                ↩️ Regresar sin registrar
+                                    </a>
                         </div>
+                        
                     </form>
+
                 </div>
             </div>
         </div>
@@ -66,21 +89,67 @@
 </div>
 
 <style>
+    /* Fondo moderno con gradiente */
     body {
-        background-color: #f2f8ff;
+        background: linear-gradient(135deg, #dfefff, #f7fbff);
+        min-height: 100vh;
+        padding-top: 30px;
     }
+
+    /* Tarjeta elegante */
     .card {
-        animation: fadeIn 0.5s ease-in-out;
+        border: none;
+        border-radius: 20px;
+        background: #ffffff;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+        animation: fadeIn 0.6s ease-in-out;
     }
+
+    /* Encabezado más moderno */
+    .card-header {
+        border-radius: 20px 20px 0 0;
+        background: linear-gradient(90deg, #0072ff, #00c6ff) !important;
+        box-shadow: inset 0 -3px 8px rgba(255, 255, 255, 0.2);
+    }
+
+    /* Inputs con borde suave */
+    .form-control-lg {
+        border-radius: 12px !important;
+        border: 1px solid #d7e9ff !important;
+        transition: 0.25s ease;
+    }
+
+    /* Efecto al seleccionar input */
+    .form-control-lg:focus {
+        border-color: #66b3ff !important;
+        box-shadow: 0 0 0 4px rgba(0, 140, 255, 0.15) !important;
+        transform: scale(1.01);
+    }
+
+    /* Botón moderno */
+    .btn-primary-custom {
+        background: linear-gradient(90deg, #00c6ff, #0072ff);
+        border: none;
+        border-radius: 50px;
+        padding: 14px;
+        font-size: 1.2rem;
+        font-weight: bold;
+        transition: 0.25s ease;
+    }
+
+    /* Efecto Hover */
+    .btn-primary-custom:hover {
+        opacity: 0.95;
+        transform: translateY(-2px) scale(1.03);
+        box-shadow: 0px 10px 20px rgba(0, 140, 255, 0.3);
+    }
+
+    /* Animación de entrada */
     @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
+        from { opacity: 0; transform: translateY(25px); }
         to { opacity: 1; transform: translateY(0); }
     }
-    button:hover {
-        opacity: 0.9;
-        transform: scale(1.02);
-        transition: 0.2s;
-    }
 </style>
+
 
 {% endblock %}
