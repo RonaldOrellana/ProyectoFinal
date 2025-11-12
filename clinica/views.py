@@ -69,30 +69,25 @@ def register_view(request):
         password1 = request.POST.get('password1')
         password2 = request.POST.get('password2')
 
-        # Validación de contraseñas
+        # Validar contraseñas
         if password1 != password2:
-            messages.error(request, 'Las contraseñas no coinciden')
+            messages.error(request, 'Las contraseñas no coinciden.')
             return redirect('register')
 
-        # Verificar si el usuario ya existe
+        # Validar nombre de usuario duplicado
         if User.objects.filter(username=username).exists():
-            messages.error(request, 'Ese usuario ya existe')
+            messages.error(request, 'Ese usuario ya existe.')
             return redirect('register')
 
         # Crear el usuario
-        user = User.objects.create_user(
-            username=username, 
-            email=email, 
-            password=password1
-        )
+        User.objects.create_user(username=username, email=email, password=password1)
+        messages.success(request, 'Cuenta creada correctamente. Inicia sesión para continuar.')
 
-        messages.success(request, 'Usuario creado correctamente. Ahora inicia sesión.')
-        
-        # ✅ REDIRECCIÓN INMEDIATA AL LOGIN
+        # Redirigir al login
         return redirect('login')
 
+    # Si no es POST, mostrar el formulario
     return render(request, 'registro.html')
-
 
 # =====================================================
 # ✅ PACIENTES
