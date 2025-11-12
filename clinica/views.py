@@ -25,38 +25,22 @@ def index(request):
 # =====================================================
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect('index')
+        return redirect('index')  # Si ya está logueado, mándalo a inicio
 
-    login_error = None
-    register_error = None
-
-    if request.method == 'POST' and 'login' in request.POST:
+    if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
+
         user = authenticate(request, username=username, password=password)
-        if user:
+        if user is not None:
             login(request, user)
-            return redirect('index')
+            messages.success(request, f'Bienvenido {username} 👋')
+            return redirect('index')  # Redirige a tu página principal
         else:
-            login_error = "Usuario o contraseña incorrectos"
+            messages.error(request, 'Usuario o contraseña incorrectos.')
+            return redirect('login')
 
-    if request.method == 'POST' and 'register' in request.POST:
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            messages.success(request, "Cuenta creada con éxito 🎉")
-            return redirect('index')
-        else:
-            register_error = "Corrige los errores del formulario."
-    else:
-        form = UserCreationForm()
-
-    return render(request, 'clinica/login.html', {
-        'login_error': login_error,
-        'register_error': register_error,
-        'register_form': form
-    })
+    return render(request, 'clinica/login.html')
 
 def cerrar_sesion(request):
     logout(request)
@@ -69,26 +53,33 @@ def register_view(request):
         password1 = request.POST.get('password1')
         password2 = request.POST.get('password2')
 
-        # Validar contraseñas
+        print("📩 Datos recibidos:", username, email)  # Debug
+
+        if not username or not password1:
+            messages.error(request, "Debe llenar todos los campos.")
+            return redirect('login')
+
         if password1 != password2:
-            messages.error(request, 'Las contraseñas no coinciden.')
-            return redirect('register')
+            messages.error(request, "Las contraseñas no coinciden.")
+            return redirect('login')
 
-        # Validar nombre de usuario duplicado
         if User.objects.filter(username=username).exists():
-            messages.error(request, 'Ese usuario ya existe.')
-            return redirect('register')
+            messages.error(request, "Ese usuario ya existe.")
+            return redirect('login')
 
-        # Crear el usuario
-        User.objects.create_user(username=username, email=email, password=password1)
-        messages.success(request, 'Cuenta creada correctamente. Inicia sesión para continuar.')
+        # ✅ Crear usuario correctamente
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password1
+        )
+        user.save()
+        print("✅ Usuario guardado correctamente")
 
-        # Redirigir al login
+        messages.success(request, "Cuenta creada. Ahora inicia sesión 💫")
         return redirect('login')
 
-    # Si no es POST, mostrar el formulario
-    return render(request, 'registro.html')
-
+    return redirect('login')
 # =====================================================
 # ✅ PACIENTES
 # =====================================================
